@@ -13,8 +13,10 @@ def _escape(string):
 def _coursier_fetch_impl(repository_ctx):
     coursier = repository_ctx.path(repository_ctx.attr._coursier)
     fqn = repository_ctx.attr.fqn
+    java_home = repository_ctx.os.environ["JAVA_HOME"]
+    java = repository_ctx.path(java_home + "/bin/java")
 
-    cmd = [coursier, "fetch", fqn]
+    cmd = [java, "-noverify", "-jar", coursier, "fetch", fqn]
     cmd.extend(["--artifact-type", "jar,aar"])
     cmd.append("--quiet")
     for repository in repository_ctx.attr.repositories:
@@ -23,7 +25,7 @@ def _coursier_fetch_impl(repository_ctx):
     exec_result = repository_ctx.execute(cmd)
 
     if (exec_result.return_code != 0):
-        fail("Error from coursier fetch: " + exec_result.stderr)
+        fail("Error while fetching artifact with coursier: " + exec_result.stderr)
 
     artifact_absolute_paths = exec_result.stdout.splitlines(keepends = False)
 
@@ -98,5 +100,6 @@ coursier_fetch = repository_rule(
         "fqn": attr.string(mandatory = True),
         "repositories": attr.string_list(),
     },
+    environ = ["JAVA_HOME"],
     implementation = _coursier_fetch_impl,
 )

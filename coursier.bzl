@@ -10,13 +10,22 @@ package(default_visibility = ["//visibility:public"])
 def _escape(string):
     return string.replace(".", "_").replace("-", "_").replace(":", "_").replace("/", "_")
 
+def _is_windows(repository_ctx):
+    return repository_ctx.os.name == "windows"
+
 def _coursier_fetch_impl(repository_ctx):
     coursier = repository_ctx.path(repository_ctx.attr._coursier)
     fqn = repository_ctx.attr.fqn
-    java_home = repository_ctx.os.environ["JAVA_HOME"]
-    java = repository_ctx.path(java_home + "/bin/java")
 
-    cmd = [java, "-noverify", "-jar", coursier, "fetch", fqn]
+    if _is_windows(repository_ctx):
+        # https://github.com/coursier/coursier/blob/master/doc/FORMER-README.md#how-can-the-launcher-be-run-on-windows-or-manually-with-the-java-program
+        # The -noverify option seems to be required after the proguarding step of the main JAR of coursier.
+        java_home = repository_ctx.os.environ["JAVA_HOME"]
+        java = repository_ctx.path(java_home + "/bin/java")
+        cmd = [java, "-noverify", "-jar", coursier, "fetch", fqn]
+    else:
+        # OSX and Darwin doesn't require the java launcher
+        cmd = [coursier, "fetch", fqn]
     cmd.extend(["--artifact-type", "jar,aar"])
     cmd.append("--quiet")
     for repository in repository_ctx.attr.repositories:
@@ -39,7 +48,8 @@ def _coursier_fetch_impl(repository_ctx):
     # The path manipulation from here on out assumes *nix paths, not Windows.
     for artifact_absolute_path in artifact_absolute_paths:
         # Super hacky way for generating the symlink destination
-        artifact_relative_path = artifact_absolute_path.split("v1/")[1]
+        # may break for custom cache paths
+        artifact_relative_path = artifact_absolute_path.replace("\\", "/").split("v1/")[1]
         repository_ctx.symlink(artifact_absolute_path, artifact_relative_path)
 
         if artifact_relative_path.find(expected_sub_path) != -1:

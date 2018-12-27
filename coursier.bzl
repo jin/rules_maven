@@ -109,7 +109,7 @@ android_library(
 
 coursier_fetch = repository_rule(
     attrs = {
-        "_coursier": attr.label(default = "//:coursier"),
+        "_coursier": attr.label(default = "//:third_party/coursier/coursier"),
         "fqn": attr.string(mandatory = True),
         "repositories": attr.string_list(),
     },

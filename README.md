@@ -99,9 +99,9 @@ The `artifact` macro used in the BUILD file just translates the artifact FQN to 
 
 ## TODO
 
-- [ ] don't symlink to the basename; symlink to the fqn-derived path
+- [x] don't symlink to the basename; symlink to the fqn-derived path
+- [x] maven server configuration
 - [ ] load test with different artifacts
-- [ ] maven server configuration
 - [ ] authentication
 - [ ] sha checks of transitive artifacts
 - [ ] support more packaging types than just aar and jar

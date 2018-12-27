@@ -5,6 +5,7 @@ android_library(
     exports = [
         artifact("android.arch.lifecycle:common:1.1.1"),
         artifact("android.arch.lifecycle:viewmodel:1.1.1"),
+        artifact("androidx.test.espresso:espresso-web:3.1.1"),
     ],
 )
 

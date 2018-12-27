@@ -4,6 +4,38 @@ transitive maven artifact repository rule prototype that just depends on the `co
 
 this is a highly experimental prototype, done for a proof of concept.
 
+## tl;dr build it
+
+```shell
+$ bazel build :my_app
+INFO: Invocation ID: a32f5c70-2165-4c6c-bee1-47bc1ab91a89
+INFO: Analysed target //:my_app (38 packages loaded, 730 targets configured).
+INFO: Found 1 target...
+Target //:my_app up-to-date:
+  bazel-bin/my_app_deploy.jar
+  bazel-bin/my_app_unsigned.apk
+  bazel-bin/my_app.apk
+INFO: Elapsed time: 9.330s, Critical Path: 8.51s
+INFO: 50 processes: 37 linux-sandbox, 13 worker.
+INFO: Build completed successfully, 92 total actions
+
+$ jar tf bazel-out/k8-fastbuild/bin/my_app_deploy.jar | grep -v ".class"
+META-INF/
+META-INF/MANIFEST.MF
+android/
+android/arch/
+android/arch/lifecycle/
+android/support/
+android/support/annotation/
+META-INF/android.arch.lifecycle_viewmodel.version
+javax/
+javax/annotation/
+javax/annotation/concurrent/
+javax/annotation/meta/
+
+... <all transitive classes>
+```
+
 ## API Design
 
 List the artifacts and servers in the WORKSPACE:
@@ -21,6 +53,7 @@ maven_install(
         # fqn : sha256
         "android.arch.lifecycle:common:1.1.1": "",
         "android.arch.lifecycle:viewmodel:1.1.1": "",
+        "androidx.test.espresso:espresso-web:3.1.1": "",
     },
     repositories = [
         "https://maven.google.com",
@@ -39,6 +72,7 @@ android_library(
     exports = [
         artifact("android.arch.lifecycle:common:1.1.1"),
         artifact("android.arch.lifecycle:viewmodel:1.1.1"),
+        artifact("androidx.test.espresso:espresso-web:3.1.1"),
     ],
 )
 

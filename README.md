@@ -7,7 +7,7 @@ this is a highly experimental prototype, done for a proof of concept.
 ## tl;dr build it
 
 ```shell
-$ bazel build :my_app
+$ cd examples/simple && bazel build :my_app
 INFO: Invocation ID: a32f5c70-2165-4c6c-bee1-47bc1ab91a89
 INFO: Analysed target //:my_app (38 packages loaded, 730 targets configured).
 INFO: Found 1 target...

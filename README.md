@@ -105,3 +105,9 @@ The `artifact` macro used in the BUILD file just translates the artifact FQN to 
 - [ ] authentication
 - [ ] sha checks of transitive artifacts
 - [ ] support more packaging types than just aar and jar
+
+## Known issues
+
+### Windows
+
+- The repository rule generates very long paths, and this is an issue on Windows.

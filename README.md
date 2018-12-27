@@ -1,4 +1,4 @@
-# rules_maven (or rules_coursier?)
+# rules_maven
 
 transitive maven artifact repository rule prototype that just depends on the `coursier` cli tool.
 

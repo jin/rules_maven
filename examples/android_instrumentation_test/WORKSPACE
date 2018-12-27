@@ -31,6 +31,9 @@ maven_install(
     ],
 )
 
+# Everything below this line is used for the Android testing tools and their dependencies
+# ---------------------------------------------------------------------------------------
+
 # Google Maven Repository
 GMAVEN_TAG = "20181206-1"
 

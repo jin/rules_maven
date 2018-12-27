@@ -10,6 +10,7 @@ load("@rules_maven//:defs.bzl", "maven_install")
 maven_install(
     artifacts = {
         # fqn : sha256
+        "junit:junit:4.12": "",
         "android.arch.lifecycle:common:1.1.1": "",
         "android.arch.lifecycle:viewmodel:1.1.1": "",
         "androidx.test.espresso:espresso-web:3.1.1": "",

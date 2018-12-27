@@ -14,23 +14,16 @@ def _coursier_fetch_impl(repository_ctx):
     coursier = repository_ctx.path(repository_ctx.attr._coursier)
     fqn = repository_ctx.attr.fqn
 
-    group_id, artifact_id, artifact_version = fqn.split(":")
-    expected_sub_path = group_id.replace(".", "/") + "/" + artifact_id + "/" + artifact_version
+    cmd = [coursier, "fetch", fqn]
+    cmd.extend(["--artifact-type", "jar,aar"])
+    cmd.append("--quiet")
+    for repository in repository_ctx.attr.repositories:
+        cmd.extend(["--repository", repository])
 
-    exec_result = repository_ctx.execute(
-        [
-            coursier,
-            "fetch",
-            fqn,
-            "--repository",
-            "https://maven.google.com",  # infer a list of this from attrs
-            "--artifact-type",
-            "jar,aar",
-            # "--cache",
-            # ".",
-            "--quiet",
-        ],
-    )
+    exec_result = repository_ctx.execute(cmd)
+
+    if (exec_result.return_code != 0):
+        fail("Error from coursier fetch: " + exec_result.stderr)
 
     artifact_paths = exec_result.stdout.splitlines(keepends = False)
 
@@ -38,20 +31,22 @@ def _coursier_fetch_impl(repository_ctx):
     java_imports = []
     aar_imports = []
 
+    group_id, artifact_id, artifact_version = fqn.split(":")
+    expected_sub_path = group_id.replace(".", "/") + "/" + artifact_id + "/" + artifact_version
+
     # The path manipulation from here on out assumes *nix paths, not Windows.
     for artifact_path in artifact_paths:
-        artifact_basename = artifact_path.split("/").pop()
-
         # Super hacky way for generating the symlink destination
         artifact_relative_path = artifact_path.split("v1/")[1]
         repository_ctx.symlink(artifact_path, artifact_relative_path)
-        artifact_packaging = artifact_basename.split(".").pop()
 
         if artifact_path.find(expected_sub_path) != -1:
             main_artifact_path = artifact_path
 
         all_import_labels.append(_escape(artifact_relative_path))
 
+        artifact_basename = artifact_path.split("/").pop()
+        artifact_packaging = artifact_basename.split(".").pop()
         if artifact_packaging == "jar":
             java_imports.append(
                 """
@@ -108,6 +103,7 @@ coursier_fetch = repository_rule(
     attrs = {
         "_coursier": attr.label(default = "//:coursier"),
         "fqn": attr.string(mandatory = True),
+        "repositories": attr.string_list(),
     },
     implementation = _coursier_fetch_impl,
 )

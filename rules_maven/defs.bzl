@@ -6,6 +6,7 @@ def maven_install(repositories = [], artifacts = {}):
         coursier_fetch(
             name = _repository_name_from_fqn(fqn),
             fqn = fqn,
+            repositories = repositories,
         )
 
 def artifact(fqn):

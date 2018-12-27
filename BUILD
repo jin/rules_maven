@@ -6,6 +6,7 @@ android_library(
         artifact("android.arch.lifecycle:common:1.1.1"),
         artifact("android.arch.lifecycle:viewmodel:1.1.1"),
         artifact("androidx.test.espresso:espresso-web:3.1.1"),
+        artifact("junit:junit:4.12"),
         # Buggy, need to use aar_import.deps instead of uber re-export
         # artifact("com.android.support:design:27.0.2"),
     ],

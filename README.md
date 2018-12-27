@@ -5,9 +5,13 @@ the `coursier` CLI tool.
 
 This is a experimental proof of concept; support is on a best-effort basis.
 
+Tested on Windows, macOS, Linux. 
+
+Requires `java` to be on your $PATH, or set `$JAVA_HOME`.
+
 ## Usage
 
-List the artifacts and servers in the WORKSPACE:
+List the top-level Maven artifacts and servers in the WORKSPACE:
 
 ```python
 RULES_MAVEN_COMMIT = <commit>
@@ -29,7 +33,6 @@ maven_install(
         "androidx.test.espresso:espresso-core:3.1.1": "",
         "androidx.test:runner:1.1.1": "",
         "androidx.test.ext:junit:1.1.0": "",
-        "..."
     },
     repositories = [
         "https://maven.google.com",
@@ -121,6 +124,7 @@ javax/annotation/meta/
 
 - [x] don't symlink to the basename; symlink to the fqn-derived path
 - [x] maven server configuration
+- [x] windows support
 - [ ] load test with different artifacts
 - [ ] authentication
 - [ ] sha checks of transitive artifacts

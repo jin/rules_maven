@@ -7,16 +7,11 @@ def maven_install(repositories = [], artifacts = {}):
             name = _repository_name_from_fqn(fqn),
             fqn = fqn,
         )
-    pass
 
 def artifact(fqn):
-    parts = fqn.split(":")
-    packaging = "jar"
-
-    if len(parts) == 4:
-        _, _, packaging, _ = parts
-
-    return "@%s//:%s" % (_repository_name_from_fqn(fqn), _repository_name_from_fqn(fqn))
+    # The top level artifact label is the same name as the repository name
+    repository_name = _repository_name_from_fqn(fqn)
+    return "@%s//:%s" % (repository_name, repository_name)
 
 def _repository_name_from_fqn(fqn):
     parts = fqn.split(":")

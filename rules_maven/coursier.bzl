@@ -16,7 +16,6 @@ def _coursier_fetch_impl(repository_ctx):
 
     group_id, artifact_id, artifact_version = fqn.split(":")
     expected_sub_path = group_id.replace(".", "/") + "/" + artifact_id + "/" + artifact_version
-    print(expected_sub_path)
 
     exec_result = repository_ctx.execute(
         [

@@ -3,7 +3,6 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 android_sdk_repository(
     name = "androidsdk",
-    path = "/usr/local/google/home/jingwen/sdk",
 )
 
 RULES_MAVEN_COMMIT = "33f99b05a71f8829c208927a8224dbd523e046a5"

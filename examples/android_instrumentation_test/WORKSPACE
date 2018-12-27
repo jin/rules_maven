@@ -9,8 +9,8 @@ RULES_MAVEN_COMMIT = "33f99b05a71f8829c208927a8224dbd523e046a5"
 
 http_archive(
     name = "rules_maven",
-    strip_prefix = "rules_coursier_prototype-%s" % RULES_MAVEN_COMMIT,
-    url = "https://github.com/jin/rules_coursier_prototype/archive/%s.zip" % RULES_MAVEN_COMMIT,
+    strip_prefix = "rules_maven-%s" % RULES_MAVEN_COMMIT,
+    url = "https://github.com/jin/rules_maven/archive/%s.zip" % RULES_MAVEN_COMMIT,
 )
 
 load("@rules_maven//:defs.bzl", "maven_install")

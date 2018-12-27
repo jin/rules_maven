@@ -5,7 +5,7 @@ android_sdk_repository(
     name = "androidsdk",
 )
 
-RULES_MAVEN_COMMIT = "33f99b05a71f8829c208927a8224dbd523e046a5"
+# RULES_MAVEN_COMMIT = "33f99b05a71f8829c208927a8224dbd523e046a5"
 
 # http_archive(
 #     name = "rules_maven",

@@ -11,7 +11,8 @@ def _escape(string):
     return string.replace(".", "_").replace("-", "_").replace(":", "_").replace("/", "_")
 
 def _is_windows(repository_ctx):
-    return repository_ctx.os.name == "windows"
+    # Windows 10 returns "windows 10"
+    return repository_ctx.os.name.find("windows") != -1
 
 def _coursier_fetch_impl(repository_ctx):
     coursier = repository_ctx.path(repository_ctx.attr._coursier)
@@ -49,6 +50,8 @@ def _coursier_fetch_impl(repository_ctx):
     for artifact_absolute_path in artifact_absolute_paths:
         # Super hacky way for generating the symlink destination
         # may break for custom cache paths
+        # also replace '\' with '/` to normalize windows paths to *nix style paths
+        # BUILD files accept only *nix paths, so we normalize them here.
         artifact_relative_path = artifact_absolute_path.replace("\\", "/").split("v1/")[1]
         repository_ctx.symlink(artifact_absolute_path, artifact_relative_path)
 

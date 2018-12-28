@@ -105,6 +105,73 @@ The `artifact` macro used in the BUILD file translates the artifact fully
 qualified name to the label of the top level `java_import`/`aar_import` target
 in the repository.
 
+For example, the generated BUILD file for `com.google.inject:guice:4.0` looks like this:
+
+```python
+package(default_visibility = ["//visibility:public"])
+java_import(
+	name = "aopalliance_aopalliance_1_0",
+	jars = ["https/repo1.maven.org/maven2/aopalliance/aopalliance/1.0/aopalliance-1.0.jar"],
+	deps = [
+	],
+)
+java_import(
+	name = "com_google_guava_guava_16_0_1",
+	jars = ["https/repo1.maven.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1.jar"],
+	deps = [
+	],
+)
+java_import(
+	name = "com_google_inject_guice_4_0",
+	jars = ["https/repo1.maven.org/maven2/com/google/inject/guice/4.0/guice-4.0.jar"],
+	deps = [
+		":aopalliance_aopalliance_1_0",
+		":javax_inject_javax_inject_1",
+		":com_google_guava_guava_16_0_1",
+	],
+)
+java_import(
+	name = "javax_inject_javax_inject_1",
+	jars = ["https/repo1.maven.org/maven2/javax/inject/javax.inject/1/javax.inject-1.jar"],
+	deps = [
+	],
+)
+```
+
+and the `artifact("com.google.inject:guice:4.0")` macro translates to
+`@com_google_inject_guice_4_0//:com_google_inject_guice_4_0`.
+
+The generated repository looks like this:
+
+```
+com_google_inject_guice_4_0/
+├── BUILD
+├── dep-tree.json
+├── https
+│   └── repo1.maven.org
+│       └── maven2
+│           ├── aopalliance
+│           │   └── aopalliance
+│           │       └── 1.0
+│           │           └── aopalliance-1.0.jar -> $HOME/.cache/coursier/v1/https/repo1.maven.org/maven2/aopalliance/aopalliance/1.0/aopalliance-1.0.jar
+│           ├── com
+│           │   └── google
+│           │       ├── guava
+│           │       │   └── guava
+│           │       │       └── 16.0.1
+│           │       │           └── guava-16.0.1.jar -> $HOME/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/guava/guava/16.0.1/guava-16.0.1.jar
+│           │       └── inject
+│           │           └── guice
+│           │               └── 4.0
+│           │                   └── guice-4.0.jar -> $HOME/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/inject/guice/4.0/guice-4.0.jar
+│           └── javax
+│               └── inject
+│                   └── javax.inject
+│                       └── 1
+│                           └── javax.inject-1.jar -> $HOME/.cache/coursier/v1/https/repo1.maven.org/maven2/javax/inject/javax.inject/1/javax.inject-1.jar
+└── WORKSPACE
+```
+
 ## Demo
 
 ```shell

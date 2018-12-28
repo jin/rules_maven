@@ -21,15 +21,14 @@ local_repository(
 load("@rules_maven//:defs.bzl", "maven_install")
 
 maven_install(
-    artifacts = {
-        # fqn : sha256
-        "junit:junit:4.12": "",
-        "com.google.inject:guice:4.0": "",
-        "org.hamcrest:java-hamcrest:2.0.0.0": "",
-        "androidx.test.espresso:espresso-core:3.1.1": "",
-        "androidx.test:runner:1.1.1": "",
-        "androidx.test.ext:junit:1.1.0": "",
-    },
+    artifacts = [
+        "junit:junit:4.12",
+        "com.google.inject:guice:4.0",
+        "org.hamcrest:java-hamcrest:2.0.0.0",
+        "androidx.test.espresso:espresso-core:3.1.1",
+        "androidx.test:runner:1.1.1",
+        "androidx.test.ext:junit:1.1.0",
+    ],
     repositories = [
         "https://maven.google.com",
         "https://repo1.maven.org",

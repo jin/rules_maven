@@ -1,8 +1,7 @@
 load("@rules_maven//:coursier.bzl", "coursier_fetch")
 
-def maven_install(repositories = [], artifacts = {}):
-    for requested_artifact in artifacts.items():
-        (fqn, sha256) = requested_artifact
+def maven_install(repositories = [], artifacts = []):
+    for fqn in artifacts:
         coursier_fetch(
             name = _repository_name_from_fqn(fqn),
             fqn = fqn,

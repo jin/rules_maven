@@ -40,15 +40,14 @@ http_archive(
 load("@rules_maven//:defs.bzl", "maven_install")
 
 maven_install(
-    artifacts = {
-        # Artifact FQN : sha256 (not implemented yet)
-        "junit:junit:4.12": "",
-        "com.google.inject:guice:4.0": "",
-        "org.hamcrest:java-hamcrest:2.0.0.0": "",
-        "androidx.test.espresso:espresso-core:3.1.1": "",
-        "androidx.test:runner:1.1.1": "",
-        "androidx.test.ext:junit:1.1.0": "",
-    },
+    artifacts = [
+        "junit:junit:4.12",
+        "com.google.inject:guice:4.0",
+        "org.hamcrest:java-hamcrest:2.0.0.0",
+        "androidx.test.espresso:espresso-core:3.1.1",
+        "androidx.test:runner:1.1.1",
+        "androidx.test.ext:junit:1.1.0",
+    ],
     repositories = [
         "https://bintray.com/bintray/jcenter",
         "https://repo1.maven.org/maven2/org/apache",
@@ -223,11 +222,10 @@ javax/annotation/meta/
 - [x] windows support
 - [x] don't reexport the entire transitive closure; create the internal tree of java/aar_import based on the pom deps
 - [x] [load test with different artifacts](./WORKSPACE)
-- [ ] migration script for gmaven_rules 
+- [ ] migration script from gmaven_rules 
 - [ ] srcjar support
 - [ ] authentication
-- [ ] sha checks of transitive artifacts
-- [ ] support more packaging types than just aar and jar
+- [ ] support more packaging types than just aar,jar, and bundle
 
 ## Known issues
 

@@ -1,5 +1,9 @@
 # rules_maven
 
+| Travis CI                                                                                                         |
+| -----                                                                                                             |
+| [![Build Status](https://travis-ci.org/jin/rules_maven.svg?branch=master)](https://travis-ci.org/jin/rules_maven) |
+
 Transitive Maven artifact repository rule implementation that just depends on
 the `coursier` CLI tool.
 

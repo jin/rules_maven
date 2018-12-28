@@ -1,11 +1,68 @@
+load("@bazel_json//lib:json_parser.bzl", "json_parse")
+
 _BUILD = """
 package(default_visibility = ["//visibility:public"])
-{main_artifact_library}
-
-{java_imports}
-
-{aar_imports}
+{imports}
 """
+
+# Generate BUILD file with java_import and aar_import for each artifact in
+# the transitive closure, with their respective deps mapped to the resolved
+# tree.
+def _generate_imports(repository_ctx, dep_tree):
+    fetched_artifacts = dep_tree["dependencies"]
+    all_imports = []
+    for artifact in fetched_artifacts:
+        absolute_path_to_artifact = artifact["file"]
+        if absolute_path_to_artifact != None:
+            # The path manipulation from here on out assumes *nix paths, not Windows.
+            # for artifact_absolute_path in artifact_absolute_paths:
+            #
+            # Also replace '\' with '/` to normalize windows paths to *nix style paths
+            # BUILD files accept only *nix paths, so we normalize them here.
+            #
+            # We assume that coursier uses the default cache location
+            # TODO(jin): allow custom cache locations
+            absolute_path_parts = absolute_path_to_artifact.replace("\\", "/").split("v1/")
+            if len(absolute_path_parts) != 2:
+                fail("Error while trying to parse the path of downloaded artifact: " + absolute_path_to_artifact)
+            else:
+                artifact_relative_path = absolute_path_parts[1]
+
+            # Make a symlink from the absolute path of the artifact to the relative
+            # path within the output_base/external.
+            repository_ctx.symlink(absolute_path_to_artifact, artifact_relative_path)
+
+            packaging = artifact_relative_path.split(".").pop()
+
+            if packaging == "jar":
+                target_import_string = ["java_import("]
+            elif packaging == "aar":
+                target_import_string = ["aar_import("]
+            else:
+                fail("Unsupported packaging type: " + packaging)
+
+            target_import_string.append("\tname = \"%s\"," % _escape(artifact["coord"]))
+
+            if packaging == "jar":
+                target_import_string.append("\tjars = [\"%s\"]," % artifact_relative_path)
+            elif packaging == "aar":
+                target_import_string.append("\taar = \"%s\"," % artifact_relative_path)
+
+            target_import_string.append("\tdeps = [")
+            artifact_deps = artifact["dependencies"]
+            for dep in artifact_deps:
+                target_import_string.append("\t\t\":%s\"," % _escape(dep))
+            target_import_string.append("\t],")
+            target_import_string.append(")")
+
+            all_imports.append("\n".join(target_import_string))
+        else:
+            fail("The artifact for " +
+                 artifact["coord"] +
+                 " was not downloaded. Perhaps the packaging type is not one of: jar, aar, bundle?\n" +
+                 "Parsed artifact data:" + artifact)
+
+    return "\n".join(all_imports)
 
 def _escape(string):
     return string.replace(".", "_").replace("-", "_").replace(":", "_").replace("/", "_")
@@ -33,8 +90,9 @@ def _coursier_fetch_impl(repository_ctx):
         fail("Unable to run coursier: " + exec_result.stderr)
 
     cmd.extend(["fetch", fqn])
-    cmd.extend(["--artifact-type", "jar,aar"])
+    cmd.extend(["--artifact-type", "jar,aar,bundle"])
     cmd.append("--quiet")
+    cmd.extend(["--json-output-file", "dep-tree.json"])
     for repository in repository_ctx.attr.repositories:
         cmd.extend(["--repository", repository])
 
@@ -42,93 +100,16 @@ def _coursier_fetch_impl(repository_ctx):
     if (exec_result.return_code != 0):
         fail("Error while fetching artifact with coursier: " + exec_result.stderr)
 
-    # Once coursier finishes a fetch, it prints out the absolute paths of
-    # all fetched artifacts in the transitive closure of the requested artifact.
-    # We use that as the source of truth to generate the repository's BUILD file.
-    artifact_absolute_paths = exec_result.stdout.splitlines(keepends = False)
-
-    all_import_labels = []
-    java_imports = []
-    aar_imports = []
-
-    # We use this to determine which downloaded artifact is the top level
-    # requested artifact.
-    group_id, artifact_id, artifact_version = fqn.split(":")
-    expected_sub_path = group_id.replace(".", "/") + "/" + artifact_id + "/" + artifact_version
-
-    # Generate BUILD file with java_import and aar_import for each artifact in
-    # the transitive closure, and a top level android_library OR java_library
-    # that exports all of the imported artifacts (for strict deps).
-    #
-    # The path manipulation from here on out assumes *nix paths, not Windows.
-    for artifact_absolute_path in artifact_absolute_paths:
-        # Super hacky way for generating the symlink destination may break for
-        # custom cache paths.
-        #
-        # Also replace '\' with '/` to normalize windows
-        # paths to *nix style paths BUILD files accept only *nix paths, so we
-        # normalize them here.
-        absolute_path_parts = artifact_absolute_path.replace("\\", "/").split("v1/")
-        if len(absolute_path_parts) != 2:
-            fail("Error while trying to parse the path of downloaded artifact: " + artifact_absolute_path)
-        else:
-            artifact_relative_path = absolute_path_parts[1]
-        all_import_labels.append(_escape(artifact_relative_path))
-
-        # Make a symlink from the absolute path of the artifact to the relative
-        # path within the output_base/external.
-        repository_ctx.symlink(artifact_absolute_path, artifact_relative_path)
-
-        if artifact_relative_path.find(expected_sub_path) != -1:
-            main_artifact_relative_path = artifact_relative_path
-            main_artifact_packaging = main_artifact_relative_path.split("/").pop().split(".").pop()
-
-        artifact_packaging = artifact_relative_path.split("/").pop().split(".").pop()
-        if artifact_packaging == "jar":
-            java_imports.append(
-                """
-java_import(
-    name = "%s",
-    jars = ["%s"],
-)""" % (_escape(artifact_relative_path), artifact_relative_path),
-            )
-
-        elif artifact_packaging == "aar":
-            aar_imports.append("""
-aar_import(
-    name = "%s",
-    aar = "%s",
-)""" % (_escape(artifact_relative_path), artifact_relative_path))
-
-    # aggregate and format all exported target names as BUILD file labels
-    exported_labels = ",\n\t\t".join(['":' + label + '"' for label in all_import_labels])
-
-    if main_artifact_packaging == "jar":
-        main_artifact_library = """
-java_library(
-    name = "%s",
-    exports = [
-        %s
-    ],
-)
-""" % (_escape(fqn), exported_labels)
-    elif main_artifact_packaging == "aar":
-        main_artifact_library = """
-android_library(
-    name = "%s",
-    exports = [
-        %s
-    ],
-)
-""" % (_escape(fqn), exported_labels)
+    # Once coursier finishes a fetch, it generates a tree of artifacts and their
+    # transitive dependencies in a JSON file. We use that as the source of truth
+    # to generate the repository's BUILD file.
+    dep_tree_json = repository_ctx.execute(["cat", "dep-tree.json"]).stdout
+    dep_tree = json_parse(dep_tree_json)
+    imports = _generate_imports(repository_ctx, dep_tree)
 
     repository_ctx.file(
         "BUILD",
-        _BUILD.format(
-            main_artifact_library = main_artifact_library,
-            java_imports = "\n".join(java_imports),
-            aar_imports = "\n".join(aar_imports),
-        ),
+        _BUILD.format(imports = imports),
         False,  # not executable
     )
 

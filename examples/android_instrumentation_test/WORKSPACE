@@ -5,13 +5,13 @@ android_sdk_repository(
     name = "androidsdk",
 )
 
-# RULES_MAVEN_COMMIT = "33f99b05a71f8829c208927a8224dbd523e046a5"
+BAZEL_JSON_COMMIT = "0d26dfd8d22c8d5476f1e49f6a9547e0f030fb8f"
 
-# http_archive(
-#     name = "rules_maven",
-#     strip_prefix = "rules_maven-%s" % RULES_MAVEN_COMMIT,
-#     url = "https://github.com/jin/rules_maven/archive/%s.zip" % RULES_MAVEN_COMMIT,
-# )
+http_archive(
+    name = "bazel_json",
+    strip_prefix = "bazel_json-%s" % BAZEL_JSON_COMMIT,
+    url = "https://github.com/erickj/bazel_json/archive/%s.zip" % BAZEL_JSON_COMMIT,
+)
 
 local_repository(
     name = "rules_maven",

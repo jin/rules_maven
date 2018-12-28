@@ -16,6 +16,19 @@ Tested on Windows, macOS, Linux.
 List the top-level Maven artifacts and servers in the WORKSPACE:
 
 ```python
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+BAZEL_JSON_COMMIT = "0d26dfd8d22c8d5476f1e49f6a9547e0f030fb8f"
+
+# This causes the build to require `--incompatible_disallow_slash_operator=false`.
+# See https://github.com/erickj/bazel_json/pull/1
+# For convenience, add `build --incompatible_disallow_slash_operator=false` to your .bazelrc.
+http_archive(
+    name = "bazel_json",
+    strip_prefix = "bazel_json-%s" % BAZEL_JSON_COMMIT,
+    url = "https://github.com/erickj/bazel_json/archive/%s.zip" % BAZEL_JSON_COMMIT,
+)
+
 RULES_MAVEN_COMMIT = <commit>
 
 http_archive(
@@ -85,15 +98,12 @@ The repository rule then..
 1. symlinks the transitive artifacts from the central cache to the repository's
    directory in the output_base
 1. creates java_import/aar_import for each transitive artifact (including the
-   top level one)
-1. creates a top level android_binary or android_library that exports all the
-   transitive java_import and aar_import targets (for strict deps)
-   * this is probably overly simplisitc and can cause classpath conflicts. see
-     TODO on changing this to make the internal java_import/aar_import tree
-     based on the POM dep topology instead.
+   top level one), and their respective deps matching the `<dependencies>`
+   element in the artifact's POM file.
 
 The `artifact` macro used in the BUILD file translates the artifact fully
-qualified name to the label of the top level target in the repository.
+qualified name to the label of the top level `java_import`/`aar_import` target
+in the repository.
 
 ## Demo
 
@@ -132,7 +142,7 @@ javax/annotation/meta/
 - [x] don't symlink to the basename; symlink to the fqn-derived path
 - [x] maven server configuration
 - [x] windows support
-- [ ] don't reexport the entire transitive closure; create the internal tree of java/aar_import based on the pom deps
+- [x] don't reexport the entire transitive closure; create the internal tree of java/aar_import based on the pom deps
 - [ ] load test with different artifacts
 - [ ] authentication
 - [ ] sha checks of transitive artifacts

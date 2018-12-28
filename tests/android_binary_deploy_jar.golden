@@ -723,6 +723,8 @@ androidx/test/espresso/ViewInteraction$SingleExecutionViewAction$1.class
 androidx/test/espresso/ViewInteraction$SingleExecutionViewAction.class
 androidx/test/espresso/ViewInteraction$SingleExecutionViewAssertion$1.class
 androidx/test/espresso/ViewInteraction$SingleExecutionViewAssertion.class
+androidx/test/ext/junit/R.class
+androidx/test/ext/junit/R$style.class
 androidx/test/ext/junit/rules/ActivityScenarioRule.class
 androidx/test/ext/junit/rules/ActivityScenarioRule$$Lambda$0.class
 androidx/test/ext/junit/rules/ActivityScenarioRule$$Lambda$1.class

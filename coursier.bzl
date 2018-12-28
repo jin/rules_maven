@@ -105,9 +105,11 @@ def _coursier_fetch_impl(repository_ctx):
     # to generate the repository's BUILD file.
     # Fow Windows, use cat from msys.
     # TODO(jin): figure out why we can't just use "type". CreateProcessW complains that "type" can't be found.
-    cat = "C:\\msys64\\usr\\bin\\cat" if (repository_ctx.os.name.find("windows") != 1) else repository_ctx.which("cat")
-    res = repository_ctx.execute([cat, repository_ctx.path("dep-tree.json")])
-    dep_tree_json = res.stdout
+    cat = "C:\\msys64\\usr\\bin\\cat" if (repository_ctx.os.name.find("windows") != -1) else repository_ctx.which("cat")
+    exec_result = repository_ctx.execute([cat, repository_ctx.path("dep-tree.json")])
+    if (exec_result.return_code != 0):
+        fail("Error while fetching parsing coursier's JSON output: " + exec_result.stderr)
+    dep_tree_json = exec_result.stdout
     dep_tree = json_parse(dep_tree_json)
     imports = _generate_imports(repository_ctx, dep_tree)
 

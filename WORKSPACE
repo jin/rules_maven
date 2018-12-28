@@ -10,6 +10,8 @@ maven_install(
         "org.hamcrest:java-hamcrest:2.0.0.0": "",
     },
     repositories = [
+        "https://bintray.com/bintray/jcenter",
+        "https://repo1.maven.org/maven2/org/apache",
         "https://maven.google.com",
     ],
 )

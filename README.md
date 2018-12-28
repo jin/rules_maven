@@ -33,6 +33,8 @@ maven_install(
         "androidx.test.ext:junit:1.1.0": "",
     },
     repositories = [
+        "https://bintray.com/bintray/jcenter",
+        "https://repo1.maven.org/maven2/org/apache",
         "https://maven.google.com",
         "https://repo1.maven.org", # this is the default server
     ],

@@ -13,7 +13,6 @@ def _escape(string):
 def _coursier_fetch_impl(repository_ctx):
     coursier = repository_ctx.path(repository_ctx.attr._coursier)
     fqn = repository_ctx.attr.fqn
-
     java_home = repository_ctx.os.environ.get("JAVA_HOME")
 
     if java_home != None:
@@ -30,7 +29,6 @@ def _coursier_fetch_impl(repository_ctx):
 
     # Try running coursier once
     exec_result = repository_ctx.execute(cmd)
-
     if exec_result.return_code != 0:
         fail("Unable to run coursier: " + exec_result.stderr)
 

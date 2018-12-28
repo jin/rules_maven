@@ -45,7 +45,7 @@ before_install:
     ./install.sh --user
     rm -f install.sh
 script:
-  - export ANDROID_HOME=/usr/local/androidsdk
+  - export ANDROID_HOME=/usr/local/android-sdk
   - ./tests/simple_integration_test.sh
 notifications:
   email: false

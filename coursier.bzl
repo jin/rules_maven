@@ -20,14 +20,15 @@ def _coursier_fetch_impl(repository_ctx):
         # https://github.com/coursier/coursier/blob/master/doc/FORMER-README.md#how-can-the-launcher-be-run-on-windows-or-manually-with-the-java-program
         # The -noverify option seems to be required after the proguarding step of the main JAR of coursier.
         java = repository_ctx.path(java_home + "/bin/java")
-        cmd = [java, "-noverify", "-jar", coursier, "fetch", fqn]
+        cmd = [java, "-noverify", "-jar", coursier]
     elif repository_ctx.which("java") != None:
         # Use 'java' from $PATH
-        cmd = [repository_ctx.which("java"), "-noverify", "-jar", coursier, "fetch", fqn]
+        cmd = [repository_ctx.which("java"), "-noverify", "-jar", coursier]
     else:
         # Try to execute coursier directly
-        cmd = [coursier, "fetch", fqn]
+        cmd = [coursier]
 
+    cmd.extend(["fetch", fqn])
     cmd.extend(["--artifact-type", "jar,aar"])
     cmd.append("--quiet")
     for repository in repository_ctx.attr.repositories:

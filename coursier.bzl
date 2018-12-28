@@ -22,7 +22,7 @@ def _generate_imports(repository_ctx, dep_tree):
             #
             # We assume that coursier uses the default cache location
             # TODO(jin): allow custom cache locations
-            absolute_path_parts = absolute_path_to_artifact.replace("\\", "/").split("v1/")
+            absolute_path_parts = absolute_path_to_artifact.replace("\\\\", "/").split("v1/")
             if len(absolute_path_parts) != 2:
                 fail("Error while trying to parse the path of downloaded artifact: " + absolute_path_to_artifact)
             else:
@@ -30,7 +30,7 @@ def _generate_imports(repository_ctx, dep_tree):
 
             # Make a symlink from the absolute path of the artifact to the relative
             # path within the output_base/external.
-            repository_ctx.symlink(absolute_path_to_artifact, artifact_relative_path)
+            repository_ctx.symlink(absolute_path_to_artifact, repository_ctx.path(artifact_relative_path))
 
             packaging = artifact_relative_path.split(".").pop()
 
@@ -103,7 +103,11 @@ def _coursier_fetch_impl(repository_ctx):
     # Once coursier finishes a fetch, it generates a tree of artifacts and their
     # transitive dependencies in a JSON file. We use that as the source of truth
     # to generate the repository's BUILD file.
-    dep_tree_json = repository_ctx.execute(["cat", "dep-tree.json"]).stdout
+    # Fow Windows, use cat from msys.
+    # TODO(jin): figure out why we can't just use "type". CreateProcessW complains that "type" can't be found.
+    cat = "C:\\msys64\\usr\\bin\\cat" if (repository_ctx.os.name.find("windows") != 1) else repository_ctx.which("cat")
+    res = repository_ctx.execute([cat, repository_ctx.path("dep-tree.json")])
+    dep_tree_json = res.stdout
     dep_tree = json_parse(dep_tree_json)
     imports = _generate_imports(repository_ctx, dep_tree)
 

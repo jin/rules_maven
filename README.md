@@ -84,9 +84,9 @@ The repository rule then..
    top level one)
 1. creates a top level android_binary or android_library that exports all the
    transitive java_import and aar_import targets (for strict deps)
-   * this will probably cause classpath conflicts and thus is unsound. see TODO
-     on changing this to make the internal java_import/aar_import tree based on
-     the POM dep topology instead.
+   * this is probably overly simplisitc and can cause classpath conflicts. see
+     TODO on changing this to make the internal java_import/aar_import tree
+     based on the POM dep topology instead.
 
 The `artifact` macro used in the BUILD file translates the artifact fully
 qualified name to the label of the top level target in the repository.

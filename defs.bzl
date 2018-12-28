@@ -1,5 +1,4 @@
 load("@rules_maven//:coursier.bzl", "coursier_fetch")
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 def maven_install(repositories = [], artifacts = {}):
     for requested_artifact in artifacts.items():

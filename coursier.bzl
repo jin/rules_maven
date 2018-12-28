@@ -28,6 +28,12 @@ def _coursier_fetch_impl(repository_ctx):
         # Try to execute coursier directly
         cmd = [coursier]
 
+    # Try running coursier once
+    exec_result = repository_ctx.execute(cmd)
+
+    if exec_result.return_code != 0:
+        fail("Unable to run coursier: " + exec_result.stderr)
+
     cmd.extend(["fetch", fqn])
     cmd.extend(["--artifact-type", "jar,aar"])
     cmd.append("--quiet")
@@ -64,7 +70,11 @@ def _coursier_fetch_impl(repository_ctx):
         # Also replace '\' with '/` to normalize windows
         # paths to *nix style paths BUILD files accept only *nix paths, so we
         # normalize them here.
-        artifact_relative_path = artifact_absolute_path.replace("\\", "/").split("v1/")[1]
+        absolute_path_parts = artifact_absolute_path.replace("\\", "/").split("v1/")
+        if len(absolute_path_parts) != 2:
+            fail("Error while trying to parse the path of downloaded artifact: " + artifact_absolute_path)
+        else:
+            artifact_relative_path = absolute_path_parts[1]
         all_import_labels.append(_escape(artifact_relative_path))
 
         # Make a symlink from the absolute path of the artifact to the relative

@@ -7,7 +7,7 @@ This is a experimental proof of concept; support is on a best-effort basis.
 
 Tested on Windows, macOS, Linux. 
 
-Requires `java` to be on your $PATH, or set `$JAVA_HOME`.
+Requires `java` to be on your `$PATH`, or set `$JAVA_HOME`.
 
 ## Usage
 

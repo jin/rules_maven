@@ -5,6 +5,9 @@ package(default_visibility = ["//visibility:public"])
 {imports}
 """
 
+def _is_windows(repository_ctx):
+    return repository_ctx.os.name.find("windows") != -1
+
 # Generate BUILD file with java_import and aar_import for each artifact in
 # the transitive closure, with their respective deps mapped to the resolved
 # tree.
@@ -74,7 +77,8 @@ def _coursier_fetch_impl(repository_ctx):
 
     if java_home != None:
         # https://github.com/coursier/coursier/blob/master/doc/FORMER-README.md#how-can-the-launcher-be-run-on-windows-or-manually-with-the-java-program
-        # The -noverify option seems to be required after the proguarding step of the main JAR of coursier.
+        # The -noverify option seems to be required after the proguarding step
+        # of the main JAR of coursier.
         java = repository_ctx.path(java_home + "/bin/java")
         cmd = [java, "-noverify", "-jar", coursier]
     elif repository_ctx.which("java") != None:
@@ -96,6 +100,12 @@ def _coursier_fetch_impl(repository_ctx):
     for repository in repository_ctx.attr.repositories:
         cmd.extend(["--repository", repository])
 
+    if _is_windows(repository_ctx):
+        # Unfortunately on Windows, coursier crashes while trying to acquire the
+        # cache's .structure.lock file while running in parallel. This does not
+        # happen on *nix.
+        cmd.extend(["--parallel", "1"])
+
     exec_result = repository_ctx.execute(cmd)
     if (exec_result.return_code != 0):
         fail("Error while fetching artifact with coursier: " + exec_result.stderr)
@@ -105,7 +115,7 @@ def _coursier_fetch_impl(repository_ctx):
     # to generate the repository's BUILD file.
     # Fow Windows, use cat from msys.
     # TODO(jin): figure out why we can't just use "type". CreateProcessW complains that "type" can't be found.
-    cat = "C:\\msys64\\usr\\bin\\cat" if (repository_ctx.os.name.find("windows") != -1) else repository_ctx.which("cat")
+    cat = "C:\\msys64\\usr\\bin\\cat" if (_is_windows(repository_ctx)) else repository_ctx.which("cat")
     exec_result = repository_ctx.execute([cat, repository_ctx.path("dep-tree.json")])
     if (exec_result.return_code != 0):
         fail("Error while fetching parsing coursier's JSON output: " + exec_result.stderr)

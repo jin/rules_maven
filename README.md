@@ -87,6 +87,8 @@ android_library(
 )
 ```
 
+## How it works
+
 Note the lack of explicit packaging type (a la gmaven_rules). `coursier`
 resolves that automatically, fetches the transitive jars using the transitive
 pom files, and saves them into a central cache `~/.cache/coursier`.
@@ -138,7 +140,9 @@ java_import(
 )
 ```
 
-and the `artifact("com.google.inject:guice:4.0")` macro translates to
+For a more complex BUILD file example, [check out the one for `com.android.support:design:28.0.0`](https://gist.github.com/jin/54f19e344db2ba930789bc3700b2838c).
+
+The `artifact("com.google.inject:guice:4.0")` macro translates to
 `@com_google_inject_guice_4_0//:com_google_inject_guice_4_0`.
 
 The generated repository looks like this:
@@ -204,7 +208,7 @@ javax/annotation/meta/
 ... <all transitive classes>
 ```
 
-## Design philosophies
+## Design philosophy
 
 - Use Starlark wherever possible (even the [JSON parser](https://github.com/erickj/bazel_json)!)
 - Keep each artifact's transitive closure contained in a single repository_rule

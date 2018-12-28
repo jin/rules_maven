@@ -7,8 +7,6 @@ This is a experimental proof of concept; support is on a best-effort basis.
 
 Tested on Windows, macOS, Linux. 
 
-Requires `java` to be on your `$PATH`, or set `$JAVA_HOME`.
-
 ## Usage
 
 List the top-level Maven artifacts and servers in the WORKSPACE:
@@ -135,7 +133,6 @@ javax/annotation/meta/
 - [ ] support more packaging types than just aar and jar
 
 ## Known issues
-
 
 ### Windows
 

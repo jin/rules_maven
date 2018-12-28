@@ -6,7 +6,7 @@ set -o pipefail
 readonly SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
 # try to run it once here to bootstrap
-../third_party/coursier/coursier
+$SCRIPT_DIR/../third_party/coursier/coursier
 
 # java_binary test
 bazel build //tests:java_binary_test_deploy.jar

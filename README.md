@@ -204,6 +204,14 @@ javax/annotation/meta/
 ... <all transitive classes>
 ```
 
+## Design philosophies
+
+- Use Starlark wherever possible (even the [JSON parser](https://github.com/erickj/bazel_json)!)
+- Keep each artifact's transitive closure contained in a single repository_rule
+- Cache artifacts as much as possible
+- Don't reimplement the artifact resolver's semantics; reuse it
+- No need to specify any transitive dependency of the top level artifact
+
 ## TODO
 
 - [x] don't symlink to the basename; symlink to the fqn-derived path

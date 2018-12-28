@@ -222,6 +222,7 @@ javax/annotation/meta/
 - [x] maven server configuration
 - [x] windows support
 - [x] don't reexport the entire transitive closure; create the internal tree of java/aar_import based on the pom deps
+- [ ] srcjar support
 - [ ] load test with different artifacts
 - [ ] authentication
 - [ ] sha checks of transitive artifacts

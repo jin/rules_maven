@@ -9,6 +9,9 @@ package(default_visibility = ["//visibility:public"])
 def _strip_packaging(coord):
     return coord.replace(":jar:", ":").replace(":aar:", ":")
 
+def _escape(string):
+    return string.replace(".", "_").replace("-", "_").replace(":", "_").replace("/", "_").replace("[", "").replace("]", "").split(",")[0]
+
 def _is_windows(repository_ctx):
     return repository_ctx.os.name.find("windows") != -1
 
@@ -75,9 +78,6 @@ def _generate_imports(repository_ctx, dep_tree, seen_imports):
                 "Parsed artifact data:" + artifact)
 
     return "\n".join(all_imports)
-
-def _escape(string):
-    return string.replace(".", "_").replace("-", "_").replace(":", "_").replace("/", "_")
 
 def _coursier_fetch_impl(repository_ctx):
     # The list of generated java_import and aar_import targets

@@ -34,6 +34,6 @@ android_binary(
         # resources from its AAR deps. If the internal dependency graph isn't
         # wired up properly, building this will fail spectacularly. This makes
         # for a good load testing target.
-        artifact("com.android.support:design:28.0.0"),
+        # artifact("com.android.support:design:28.0.0"),
     ],
 )

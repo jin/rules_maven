@@ -20,58 +20,59 @@ def _generate_imports(repository_ctx, dep_tree, seen_imports):
     all_imports = []
 
     for artifact in fetched_artifacts:
-        target_label = _escape(_strip_packaging(artifact["coord"]))
-        if target_label not in seen_imports:
-            seen_imports[target_label] = True
-            absolute_path_to_artifact = artifact["file"]
-            if absolute_path_to_artifact != None:
-                # The path manipulation from here on out assumes *nix paths, not Windows.
-                # for artifact_absolute_path in artifact_absolute_paths:
-                #
-                # Also replace '\' with '/` to normalize windows paths to *nix style paths
-                # BUILD files accept only *nix paths, so we normalize them here.
-                #
-                # We assume that coursier uses the default cache location
-                # TODO(jin): allow custom cache locations
-                absolute_path_parts = absolute_path_to_artifact.replace("\\\\", "/").split("v1/")
-                if len(absolute_path_parts) != 2:
-                    fail("Error while trying to parse the path of downloaded artifact: " + absolute_path_to_artifact)
-                else:
-                    artifact_relative_path = absolute_path_parts[1]
+        absolute_path_to_artifact = artifact["file"]
+        if absolute_path_to_artifact not in seen_imports and absolute_path_to_artifact != None:
+            seen_imports[absolute_path_to_artifact] = True
 
-                # Make a symlink from the absolute path of the artifact to the relative
-                # path within the output_base/external.
-                repository_ctx.symlink(absolute_path_to_artifact, repository_ctx.path(artifact_relative_path))
-
-                packaging = artifact_relative_path.split(".").pop()
-
-                if packaging == "jar":
-                    target_import_string = ["java_import("]
-                elif packaging == "aar":
-                    target_import_string = ["aar_import("]
-                else:
-                    fail("Unsupported packaging type: " + packaging)
-
-                target_import_string.append("\tname = \"%s\"," % target_label)
-
-                if packaging == "jar":
-                    target_import_string.append("\tjars = [\"%s\"]," % artifact_relative_path)
-                elif packaging == "aar":
-                    target_import_string.append("\taar = \"%s\"," % artifact_relative_path)
-
-                target_import_string.append("\tdeps = [")
-                artifact_deps = artifact["dependencies"]
-                for dep in artifact_deps:
-                    target_import_string.append("\t\t\":%s\"," % _escape(dep))
-                target_import_string.append("\t],")
-                target_import_string.append(")")
-
-                all_imports.append("\n".join(target_import_string))
+            target_label = _escape(_strip_packaging(artifact["coord"]))
+            # The path manipulation from here on out assumes *nix paths, not Windows.
+            # for artifact_absolute_path in artifact_absolute_paths:
+            #
+            # Also replace '\' with '/` to normalize windows paths to *nix style paths
+            # BUILD files accept only *nix paths, so we normalize them here.
+            #
+            # We assume that coursier uses the default cache location
+            # TODO(jin): allow custom cache locations
+            absolute_path_parts = absolute_path_to_artifact.replace("\\\\", "/").split("v1/")
+            if len(absolute_path_parts) != 2:
+                fail("Error while trying to parse the path of downloaded artifact: " + absolute_path_to_artifact)
             else:
-                fail("The artifact for " +
-                    artifact["coord"] +
-                    " was not downloaded. Perhaps the packaging type is not one of: jar, aar, bundle?\n" +
-                    "Parsed artifact data:" + artifact)
+                artifact_relative_path = absolute_path_parts[1]
+
+            # Make a symlink from the absolute path of the artifact to the relative
+            # path within the output_base/external.
+            repository_ctx.symlink(absolute_path_to_artifact, repository_ctx.path(artifact_relative_path))
+
+            packaging = artifact_relative_path.split(".").pop()
+
+            if packaging == "jar":
+                target_import_string = ["java_import("]
+            elif packaging == "aar":
+                target_import_string = ["aar_import("]
+            else:
+                fail("Unsupported packaging type: " + packaging)
+
+            target_import_string.append("\tname = \"%s\"," % target_label)
+
+            if packaging == "jar":
+                target_import_string.append("\tjars = [\"%s\"]," % artifact_relative_path)
+            elif packaging == "aar":
+                target_import_string.append("\taar = \"%s\"," % artifact_relative_path)
+
+            target_import_string.append("\tdeps = [")
+            artifact_deps = artifact["dependencies"]
+            for dep in artifact_deps:
+                target_import_string.append("\t\t\":%s\"," % _escape(_strip_packaging(dep)))
+            target_import_string.append("\t],")
+            target_import_string.append(")")
+
+            all_imports.append("\n".join(target_import_string))
+
+        elif absolute_path_to_artifact == None:
+            fail("The artifact for " +
+                artifact["coord"] +
+                " was not downloaded. Perhaps the packaging type is not one of: jar, aar, bundle?\n" +
+                "Parsed artifact data:" + artifact)
 
     return "\n".join(all_imports)
 

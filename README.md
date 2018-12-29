@@ -29,7 +29,7 @@ http_archive(
     url = "https://github.com/erickj/bazel_json/archive/%s.zip" % BAZEL_JSON_COMMIT,
 )
 
-RULES_MAVEN_COMMIT = <commit>
+RULES_MAVEN_TAG = "0.0.3" # or latest tag
 
 http_archive(
     name = "rules_maven",
@@ -42,17 +42,11 @@ load("@rules_maven//:defs.bzl", "maven_install")
 maven_install(
     artifacts = [
         "junit:junit:4.12",
-        "com.google.inject:guice:4.0",
-        "org.hamcrest:java-hamcrest:2.0.0.0",
         "androidx.test.espresso:espresso-core:3.1.1",
-        "androidx.test:runner:1.1.1",
-        "androidx.test.ext:junit:1.1.0",
     ],
     repositories = [
         "https://bintray.com/bintray/jcenter",
-        "https://repo1.maven.org/maven2/org/apache",
         "https://maven.google.com",
-        "https://repo1.maven.org", # this is the default server
     ],
 )
 ```
@@ -66,22 +60,7 @@ android_library(
     name = "test_deps",
     exports = [
         artifact("androidx.test.espresso:espresso-core:3.1.1"),
-        artifact("androidx.test:runner:1.1.1"),
-        artifact("androidx.test.ext:junit:1.1.0"),
         artifact("junit:junit:4.12"),
-        artifact("com.google.inject:guice:4.0"),
-        artifact("org.hamcrest:java-hamcrest:2.0.0.0"),
-    ],
-)
-
-android_library(
-    name = "greeter_test_lib",
-    srcs = ["GreeterTest.java"],
-    custom_package = "com.example.bazel.test",
-    visibility = ["//src/test:__subpackages__"],
-    deps = [
-        ":test_deps",
-        "//src/main/java/com/example/bazel:greeter_activity",
     ],
 )
 ```
@@ -94,17 +73,16 @@ pom files, and saves them into a central cache `~/.cache/coursier`.
 
 The repository rule then..
 
-1. creates one repository for each top level artifact
-1. creates a BUILD file for each repository
+1. creates the repository "@maven"
 1. symlinks the transitive artifacts from the central cache to the repository's
    directory in the output_base
-1. creates java_import/aar_import for each transitive artifact (including the
-   top level one), and their respective deps matching the `<dependencies>`
-   element in the artifact's POM file.
+1. creates a single BUILD file with `java_import`/`aar_import` targets for each
+   transitive artifact (including the top level ones), and their respective deps
+   matching the `<dependencies>` element in the artifact's POM file.
 
 The `artifact` macro used in the BUILD file translates the artifact fully
 qualified name to the label of the top level `java_import`/`aar_import` target
-in the repository.
+in the `@maven` repository.
 
 For example, the generated BUILD file for `com.google.inject:guice:4.0` looks like this:
 
@@ -139,15 +117,16 @@ java_import(
 )
 ```
 
-For a more complex BUILD file example, [check out the one for `com.android.support:design:28.0.0`](https://gist.github.com/jin/54f19e344db2ba930789bc3700b2838c).
+For a more complex BUILD file example, [check out the one for
+`com.android.support:design:28.0.0`](https://gist.github.com/jin/54f19e344db2ba930789bc3700b2838c).
 
 The `artifact("com.google.inject:guice:4.0")` macro translates to
-`@com_google_inject_guice_4_0//:com_google_inject_guice_4_0`.
+`@maven//:com_google_inject_guice_4_0`.
 
 The generated repository looks like this:
 
 ```
-com_google_inject_guice_4_0/
+maven/
 ├── BUILD
 ├── dep-tree.json
 ├── https
@@ -199,7 +178,7 @@ You can find demos in the [`examples/`](./examples/) directory.
 - [ ] migration script from gmaven_rules 
 - [ ] srcjar support
 - [ ] authentication
-- [ ] support more packaging types than just aar,jar, and bundle
+- [ ] support more packaging types than just aar, jar, and bundle
 
 ## Known issues
 

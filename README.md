@@ -177,35 +177,7 @@ com_google_inject_guice_4_0/
 
 ## Demo
 
-```shell
-$ cd examples/simple && bazel build :my_app
-INFO: Invocation ID: a32f5c70-2165-4c6c-bee1-47bc1ab91a89
-INFO: Analysed target //:my_app (38 packages loaded, 730 targets configured).
-INFO: Found 1 target...
-Target //:my_app up-to-date:
-  bazel-bin/my_app_deploy.jar
-  bazel-bin/my_app_unsigned.apk
-  bazel-bin/my_app.apk
-INFO: Elapsed time: 9.330s, Critical Path: 8.51s
-INFO: 50 processes: 37 linux-sandbox, 13 worker.
-INFO: Build completed successfully, 92 total actions
-
-$ jar tf bazel-out/k8-fastbuild/bin/my_app_deploy.jar | grep -v ".class"
-META-INF/
-META-INF/MANIFEST.MF
-android/
-android/arch/
-android/arch/lifecycle/
-android/support/
-android/support/annotation/
-META-INF/android.arch.lifecycle_viewmodel.version
-javax/
-javax/annotation/
-javax/annotation/concurrent/
-javax/annotation/meta/
-
-... <all transitive classes>
-```
+You can find demos in the [`examples/`](./examples/) directory.
 
 ## Design philosophy
 

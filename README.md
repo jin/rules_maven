@@ -194,6 +194,7 @@ You can find demos in the [`examples/`](./examples/) directory.
 - [x] windows support
 - [x] don't reexport the entire transitive closure; create the internal tree of java/aar_import based on the pom deps
 - [x] [load test with different artifacts](./WORKSPACE)
+- [ ] java_plugin / annotation processor support
 - [ ] more tests
 - [ ] migration script from gmaven_rules 
 - [ ] srcjar support

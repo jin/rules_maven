@@ -1,19 +1,18 @@
 load("@rules_maven//:coursier.bzl", "coursier_fetch")
 
+REPOSITORY_NAME = "maven"
+
 def maven_install(repositories = [], artifacts = []):
-    for fqn in artifacts:
-        coursier_fetch(
-            name = _repository_name_from_fqn(fqn),
-            fqn = fqn,
-            repositories = repositories,
-        )
+    coursier_fetch(
+        name = REPOSITORY_NAME,
+        artifacts = artifacts,
+        repositories = repositories,
+    )
 
 def artifact(fqn):
-    # The top level artifact label is the same name as the repository name
-    repository_name = _repository_name_from_fqn(fqn)
-    return "@%s//:%s" % (repository_name, repository_name)
+    return "@%s//:%s" % (REPOSITORY_NAME, _escape_fqn(fqn))
 
-def _repository_name_from_fqn(fqn):
+def _escape_fqn(fqn):
     parts = fqn.split(":")
     packaging = "jar"
 

@@ -26,7 +26,7 @@ android:
 
 os:
   - linux
-  - windows
+  # - windows
   # - osx
 
 env:

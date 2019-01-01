@@ -50,7 +50,7 @@ script:
       bazel build //tests:java_binary_test
     else
       export ANDROID_HOME=/usr/local/android-sdk
-      ./tests/simple_integration_test.sh
+      ./tests/integration/simple_integration_test.sh
     fi
 notifications:
   email: false

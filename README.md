@@ -60,7 +60,9 @@ android_library(
     name = "test_deps",
     exports = [
         artifact("androidx.test.espresso:espresso-core:3.1.1"),
+        # or @maven//:androidx_test_espresso_espresso_core_3_1_1
         artifact("junit:junit:4.12"),
+        # or "@maven//:junit_junit_4_12"
     ],
 )
 ```

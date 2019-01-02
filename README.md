@@ -156,6 +156,10 @@ maven/
 └── WORKSPACE
 ```
 
+For more information, see the [unit test
+data](https://github.com/jin/rules_maven/blob/master/tests/unit/coursier_testdata.bzl)
+for the BUILD file generator.
+
 ## Demo
 
 You can find demos in the [`examples/`](./examples/) directory.
@@ -175,8 +179,8 @@ You can find demos in the [`examples/`](./examples/) directory.
 - [x] windows support
 - [x] don't reexport the entire transitive closure; create the internal tree of java/aar_import based on the pom deps
 - [x] [load test with different artifacts](./WORKSPACE)
+- [x] more tests
 - [ ] java_plugin / annotation processor support
-- [ ] more tests
 - [ ] migration script from gmaven_rules 
 - [ ] srcjar support
 - [ ] authentication

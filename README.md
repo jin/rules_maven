@@ -33,8 +33,8 @@ RULES_MAVEN_TAG = "0.0.3" # or latest tag
 
 http_archive(
     name = "rules_maven",
-    strip_prefix = "rules_maven-%s" % RULES_MAVEN_COMMIT,
-    url = "https://github.com/jin/rules_maven/archive/%s.zip" % RULES_MAVEN_COMMIT,
+    strip_prefix = "rules_maven-%s" % RULES_MAVEN_TAG,
+    url = "https://github.com/jin/rules_maven/archive/%s.zip" % RULES_MAVEN_TAG,
 )
 
 load("@rules_maven//:defs.bzl", "maven_install")

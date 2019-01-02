@@ -18,7 +18,7 @@ List the top-level Maven artifacts and servers in the WORKSPACE:
 ```python
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-RULES_MAVEN_TAG = "0.0.3" # or latest tag
+RULES_MAVEN_TAG = "0.0.4" # or latest tag
 
 http_archive(
     name = "rules_maven",

@@ -114,14 +114,14 @@ ANDROID_DESIGN_JSON_INPUT = """{
   "dependencies": [
     {
       "coord": "android.arch.core:common:1.1.1",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/core/common/1.1.1/common-1.1.1.jar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/core/common/1.1.1/common-1.1.1.jar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "android.arch.core:runtime:aar:1.1.1",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/core/runtime/1.1.1/runtime-1.1.1.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/core/runtime/1.1.1/runtime-1.1.1.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0",
         "android.arch.core:common:1.1.1"
@@ -129,14 +129,14 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "android.arch.lifecycle:common:1.1.1",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/common/1.1.1/common-1.1.1.jar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/common/1.1.1/common-1.1.1.jar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "android.arch.lifecycle:livedata-core:aar:1.1.1",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/livedata-core/1.1.1/livedata-core-1.1.1.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/livedata-core/1.1.1/livedata-core-1.1.1.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0",
         "android.arch.core:common:1.1.1",
@@ -146,7 +146,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "android.arch.lifecycle:livedata:aar:1.1.1",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/livedata/1.1.1/livedata-1.1.1.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/livedata/1.1.1/livedata-1.1.1.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0",
         "android.arch.core:runtime:aar:1.1.1",
@@ -157,7 +157,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "android.arch.lifecycle:runtime:aar:1.1.1",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/runtime/1.1.1/runtime-1.1.1.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/runtime/1.1.1/runtime-1.1.1.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0",
         "android.arch.core:common:1.1.1",
@@ -166,14 +166,14 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "android.arch.lifecycle:viewmodel:aar:1.1.1",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/viewmodel/1.1.1/viewmodel-1.1.1.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/android/arch/lifecycle/viewmodel/1.1.1/viewmodel-1.1.1.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "com.android.support:animated-vector-drawable:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/animated-vector-drawable/28.0.0/animated-vector-drawable-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/animated-vector-drawable/28.0.0/animated-vector-drawable-28.0.0.aar",
       "dependencies": [
         "android.arch.lifecycle:viewmodel:aar:1.1.1",
         "com.android.support:customview:aar:28.0.0",
@@ -206,7 +206,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:appcompat-v7:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/appcompat-v7/28.0.0/appcompat-v7-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/appcompat-v7/28.0.0/appcompat-v7-28.0.0.aar",
       "dependencies": [
         "android.arch.lifecycle:viewmodel:aar:1.1.1",
         "com.android.support:customview:aar:28.0.0",
@@ -241,7 +241,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:asynclayoutinflater:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/asynclayoutinflater/28.0.0/asynclayoutinflater-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/asynclayoutinflater/28.0.0/asynclayoutinflater-28.0.0.aar",
       "dependencies": [
         "com.android.support:collections:28.0.0",
         "com.android.support:versionedparcelable:aar:28.0.0",
@@ -254,21 +254,21 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:cardview-v7:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/cardview-v7/28.0.0/cardview-v7-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/cardview-v7/28.0.0/cardview-v7-28.0.0.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "com.android.support:collections:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/collections/28.0.0/collections-28.0.0.jar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/collections/28.0.0/collections-28.0.0.jar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "com.android.support:coordinatorlayout:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/coordinatorlayout/28.0.0/coordinatorlayout-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/coordinatorlayout/28.0.0/coordinatorlayout-28.0.0.aar",
       "dependencies": [
         "com.android.support:customview:aar:28.0.0",
         "com.android.support:collections:28.0.0",
@@ -282,14 +282,14 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:cursoradapter:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/cursoradapter/28.0.0/cursoradapter-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/cursoradapter/28.0.0/cursoradapter-28.0.0.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "com.android.support:customview:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/customview/28.0.0/customview-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/customview/28.0.0/customview-28.0.0.aar",
       "dependencies": [
         "com.android.support:collections:28.0.0",
         "com.android.support:versionedparcelable:aar:28.0.0",
@@ -302,7 +302,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:design:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/design/28.0.0/design-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/design/28.0.0/design-28.0.0.aar",
       "dependencies": [
         "android.arch.lifecycle:viewmodel:aar:1.1.1",
         "com.android.support:customview:aar:28.0.0",
@@ -341,14 +341,14 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:documentfile:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/documentfile/28.0.0/documentfile-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/documentfile/28.0.0/documentfile-28.0.0.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "com.android.support:drawerlayout:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/drawerlayout/28.0.0/drawerlayout-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/drawerlayout/28.0.0/drawerlayout-28.0.0.aar",
       "dependencies": [
         "com.android.support:customview:aar:28.0.0",
         "com.android.support:collections:28.0.0",
@@ -362,14 +362,14 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:interpolator:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/interpolator/28.0.0/interpolator-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/interpolator/28.0.0/interpolator-28.0.0.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "com.android.support:loader:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/loader/28.0.0/loader-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/loader/28.0.0/loader-28.0.0.aar",
       "dependencies": [
         "android.arch.lifecycle:viewmodel:aar:1.1.1",
         "com.android.support:collections:28.0.0",
@@ -386,21 +386,21 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:localbroadcastmanager:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/localbroadcastmanager/28.0.0/localbroadcastmanager-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/localbroadcastmanager/28.0.0/localbroadcastmanager-28.0.0.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "com.android.support:print:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/print/28.0.0/print-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/print/28.0.0/print-28.0.0.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0"
       ]
     },
     {
       "coord": "com.android.support:recyclerview-v7:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/recyclerview-v7/28.0.0/recyclerview-v7-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/recyclerview-v7/28.0.0/recyclerview-v7-28.0.0.aar",
       "dependencies": [
         "android.arch.lifecycle:viewmodel:aar:1.1.1",
         "com.android.support:customview:aar:28.0.0",
@@ -432,7 +432,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:slidingpanelayout:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/slidingpanelayout/28.0.0/slidingpanelayout-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/slidingpanelayout/28.0.0/slidingpanelayout-28.0.0.aar",
       "dependencies": [
         "com.android.support:customview:aar:28.0.0",
         "com.android.support:collections:28.0.0",
@@ -446,12 +446,12 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:support-annotations:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-annotations/28.0.0/support-annotations-28.0.0.jar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-annotations/28.0.0/support-annotations-28.0.0.jar",
       "dependencies": []
     },
     {
       "coord": "com.android.support:support-compat:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-compat/28.0.0/support-compat-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-compat/28.0.0/support-compat-28.0.0.aar",
       "dependencies": [
         "com.android.support:collections:28.0.0",
         "com.android.support:versionedparcelable:aar:28.0.0",
@@ -463,7 +463,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:support-core-ui:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-core-ui/28.0.0/support-core-ui-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-core-ui/28.0.0/support-core-ui-28.0.0.aar",
       "dependencies": [
         "android.arch.lifecycle:viewmodel:aar:1.1.1",
         "com.android.support:customview:aar:28.0.0",
@@ -494,7 +494,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:support-core-utils:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-core-utils/28.0.0/support-core-utils-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-core-utils/28.0.0/support-core-utils-28.0.0.aar",
       "dependencies": [
         "android.arch.lifecycle:viewmodel:aar:1.1.1",
         "com.android.support:print:aar:28.0.0",
@@ -515,7 +515,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:support-fragment:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-fragment/28.0.0/support-fragment-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-fragment/28.0.0/support-fragment-28.0.0.aar",
       "dependencies": [
         "android.arch.lifecycle:viewmodel:aar:1.1.1",
         "com.android.support:customview:aar:28.0.0",
@@ -547,7 +547,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:support-vector-drawable:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-vector-drawable/28.0.0/support-vector-drawable-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/support-vector-drawable/28.0.0/support-vector-drawable-28.0.0.aar",
       "dependencies": [
         "com.android.support:collections:28.0.0",
         "com.android.support:versionedparcelable:aar:28.0.0",
@@ -560,7 +560,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:swiperefreshlayout:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/swiperefreshlayout/28.0.0/swiperefreshlayout-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/swiperefreshlayout/28.0.0/swiperefreshlayout-28.0.0.aar",
       "dependencies": [
         "com.android.support:collections:28.0.0",
         "com.android.support:interpolator:aar:28.0.0",
@@ -574,7 +574,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:transition:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/transition/28.0.0/transition-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/transition/28.0.0/transition-28.0.0.aar",
       "dependencies": [
         "com.android.support:collections:28.0.0",
         "com.android.support:versionedparcelable:aar:28.0.0",
@@ -587,7 +587,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:versionedparcelable:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/versionedparcelable/28.0.0/versionedparcelable-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/versionedparcelable/28.0.0/versionedparcelable-28.0.0.aar",
       "dependencies": [
         "com.android.support:support-annotations:28.0.0",
         "com.android.support:collections:28.0.0"
@@ -595,7 +595,7 @@ ANDROID_DESIGN_JSON_INPUT = """{
     },
     {
       "coord": "com.android.support:viewpager:aar:28.0.0",
-      "file": "/Users/jin/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/viewpager/28.0.0/viewpager-28.0.0.aar",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/maven.google.com/com/android/support/viewpager/28.0.0/viewpager-28.0.0.aar",
       "dependencies": [
         "com.android.support:customview:aar:28.0.0",
         "com.android.support:collections:28.0.0",

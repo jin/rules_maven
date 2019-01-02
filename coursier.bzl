@@ -18,7 +18,9 @@ def _is_windows(repository_ctx):
 # Generate BUILD file with java_import and aar_import for each artifact in
 # the transitive closure, with their respective deps mapped to the resolved
 # tree.
-def _generate_imports(repository_ctx, dep_tree, seen_imports):
+#
+# Public function for testing.
+def generate_imports(repository_ctx, dep_tree, seen_imports):
     fetched_artifacts = dep_tree["dependencies"]
     all_imports = []
 
@@ -138,7 +140,7 @@ def _coursier_fetch_impl(repository_ctx):
             fail("Error while fetching parsing coursier's JSON output: " + exec_result.stderr)
         dep_tree_json = exec_result.stdout
         dep_tree = json_parse(dep_tree_json)
-        imports.append(_generate_imports(repository_ctx, dep_tree, seen_imports))
+        imports.append(generate_imports(repository_ctx, dep_tree, seen_imports))
 
     repository_ctx.file(
         "BUILD",

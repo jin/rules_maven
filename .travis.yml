@@ -3,7 +3,7 @@
 dist: trusty
 sudo: required
 # xcode8 has jdk8
-osx_image: xcode8.3
+# osx_image: xcode8.3
 language: android
 
 android:
@@ -19,14 +19,10 @@ android:
     # The SDK version used to compile your project
     - android-28
 
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests
-    # - sys-img-x86-android-26
-    # - sys-img-armeabi-v7a-android-17
-
 os:
   - linux
-  # - windows
+  # TODO make these work
+  # - windows 
   # - osx
 
 env:
@@ -50,7 +46,9 @@ script:
       bazel build //tests:java_binary_test
     else
       export ANDROID_HOME=/usr/local/android-sdk
-      ./tests/simple_integration_test.sh
+      bazel test //tests/unit/... && \
+        ./tests/integration/simple_integration_test.sh
     fi
+
 notifications:
   email: false

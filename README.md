@@ -30,8 +30,8 @@ RULES_MAVEN_TAG = "0.0.3" # or latest tag
 
 http_archive(
     name = "rules_maven",
-    strip_prefix = "rules_maven-%s" % RULES_MAVEN_COMMIT,
-    url = "https://github.com/jin/rules_maven/archive/%s.zip" % RULES_MAVEN_COMMIT,
+    strip_prefix = "rules_maven-%s" % RULES_MAVEN_TAG,
+    url = "https://github.com/jin/rules_maven/archive/%s.zip" % RULES_MAVEN_TAG,
 )
 
 load("@rules_maven//:defs.bzl", "maven_install")
@@ -153,6 +153,10 @@ maven/
 └── WORKSPACE
 ```
 
+For more information, see the [unit test
+data](https://github.com/jin/rules_maven/blob/master/tests/unit/coursier_testdata.bzl)
+for the BUILD file generator.
+
 ## Demo
 
 You can find demos in the [`examples/`](./examples/) directory.
@@ -172,8 +176,8 @@ You can find demos in the [`examples/`](./examples/) directory.
 - [x] windows support
 - [x] don't reexport the entire transitive closure; create the internal tree of java/aar_import based on the pom deps
 - [x] [load test with different artifacts](./WORKSPACE)
+- [x] more tests
 - [ ] java_plugin / annotation processor support
-- [ ] more tests
 - [ ] migration script from gmaven_rules 
 - [ ] srcjar support
 - [ ] authentication

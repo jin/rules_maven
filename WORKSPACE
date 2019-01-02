@@ -9,10 +9,9 @@ http_archive(
     strip_prefix = "bazel_json-%s" % BAZEL_JSON_COMMIT,
     url = "https://github.com/erickj/bazel_json/archive/%s.zip" % BAZEL_JSON_COMMIT,
 )
+# Begin test dependencies
 
 load("//:defs.bzl", "maven_install")
-
-# Begin test dependencies
 
 maven_install(
     artifacts = [
@@ -39,5 +38,16 @@ maven_install(
 )
 
 android_sdk_repository(name = "androidsdk")
+
+BAZEL_SKYLIB_TAG = "0.6.0"
+
+http_archive(
+    name = "bazel_skylib",
+    strip_prefix = "bazel-skylib-%s" % BAZEL_SKYLIB_TAG,
+    url = "https://github.com/bazelbuild/bazel-skylib/archive/%s.tar.gz" % BAZEL_SKYLIB_TAG,
+)
+
+# load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+# bazel_skylib_workspace()
 
 # End test dependencies

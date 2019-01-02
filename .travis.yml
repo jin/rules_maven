@@ -46,9 +46,8 @@ script:
       bazel build //tests:java_binary_test
     else
       export ANDROID_HOME=/usr/local/android-sdk
-      ./tests/integration/simple_integration_test.sh
-
-      bazel test //tests/unit/...
+      bazel test //tests/unit/... && \
+        ./tests/integration/simple_integration_test.sh
     fi
 
 notifications:

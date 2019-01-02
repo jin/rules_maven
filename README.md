@@ -18,14 +18,6 @@ List the top-level Maven artifacts and servers in the WORKSPACE:
 ```python
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-BAZEL_JSON_COMMIT = "e954ef2c28cd92d97304810e8999e1141e2b5cc8"
-
-http_archive(
-    name = "bazel_json",
-    strip_prefix = "bazel_json-%s" % BAZEL_JSON_COMMIT,
-    url = "https://github.com/erickj/bazel_json/archive/%s.zip" % BAZEL_JSON_COMMIT,
-)
-
 RULES_MAVEN_TAG = "0.0.3" # or latest tag
 
 http_archive(
@@ -169,6 +161,11 @@ You can find demos in the [`examples/`](./examples/) directory.
 - Don't reimplement the artifact resolver's semantics; reuse it
 - No need to specify any transitive dependency of the top level artifact
 
+## Known issues
+
+### Windows
+
+- The repository rule generates very long paths, and this is an issue on Windows.
 ## TODO
 
 - [x] don't symlink to the basename; symlink to the fqn-derived path
@@ -182,9 +179,3 @@ You can find demos in the [`examples/`](./examples/) directory.
 - [ ] srcjar support
 - [ ] authentication
 - [ ] support more packaging types than just aar, jar, and bundle
-
-## Known issues
-
-### Windows
-
-- The repository rule generates very long paths, and this is an issue on Windows.

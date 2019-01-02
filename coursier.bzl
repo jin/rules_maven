@@ -1,4 +1,4 @@
-load("@bazel_json//lib:json_parser.bzl", "json_parse")
+load("//third_party/bazel_json/lib:json_parser.bzl", "json_parse")
 
 _BUILD = """
 package(default_visibility = ["//visibility:public"])
@@ -30,6 +30,7 @@ def generate_imports(repository_ctx, dep_tree, seen_imports):
             seen_imports[absolute_path_to_artifact] = True
 
             target_label = _escape(_strip_packaging(artifact["coord"]))
+
             # The path manipulation from here on out assumes *nix paths, not Windows.
             # for artifact_absolute_path in artifact_absolute_paths:
             #
@@ -75,9 +76,9 @@ def generate_imports(repository_ctx, dep_tree, seen_imports):
 
         elif absolute_path_to_artifact == None:
             fail("The artifact for " +
-                artifact["coord"] +
-                " was not downloaded. Perhaps the packaging type is not one of: jar, aar, bundle?\n" +
-                "Parsed artifact data:" + artifact)
+                 artifact["coord"] +
+                 " was not downloaded. Perhaps the packaging type is not one of: jar, aar, bundle?\n" +
+                 "Parsed artifact data:" + artifact)
 
     return "\n".join(all_imports)
 
@@ -91,6 +92,7 @@ def _coursier_fetch_impl(repository_ctx):
 
     for fqn in repository_ctx.attr.artifacts:
         coursier = repository_ctx.path(repository_ctx.attr._coursier)
+
         # fqn = repository_ctx.attr.fqn
         java_home = repository_ctx.os.environ.get("JAVA_HOME")
 

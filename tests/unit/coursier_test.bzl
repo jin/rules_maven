@@ -1,6 +1,6 @@
 load("@bazel_skylib//lib:unittest.bzl", "unittest", "asserts")
 load("@bazel_json//lib:json_parser.bzl", "json_parse")
-load(":coursier_testdata.bzl", "GUAVA_JSON_INPUT", "GUAVA_EXPECTED_BUILD")
+load(":coursier_testdata.bzl", "TEST_PAIRS")
 load("//:coursier.bzl", "generate_imports")
 
 def _mock_1_arity_fn(unused):
@@ -19,8 +19,9 @@ def _coursier_test_impl(ctx):
     env = unittest.begin(ctx)
     mock_repository_ctx = _mock_repository_ctx()
 
-    GUAVA_ACTUAL_BUILD = generate_imports(mock_repository_ctx, json_parse(GUAVA_JSON_INPUT), {})
-    asserts.equals(env, GUAVA_EXPECTED_BUILD, GUAVA_ACTUAL_BUILD)
+    for (json_input, expected_build_file) in TEST_PAIRS:
+        GUAVA_ACTUAL_BUILD = generate_imports(mock_repository_ctx, json_parse(json_input), {})
+        asserts.equals(env, expected_build_file, GUAVA_ACTUAL_BUILD)
 
     unittest.end(env)
 

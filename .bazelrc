@@ -1,1 +1,0 @@
-build --incompatible_disallow_slash_operator=false

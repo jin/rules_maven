@@ -2,7 +2,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 android_sdk_repository(name = "androidsdk")
 
-BAZEL_JSON_COMMIT = "0d26dfd8d22c8d5476f1e49f6a9547e0f030fb8f"
+BAZEL_JSON_COMMIT = "e954ef2c28cd92d97304810e8999e1141e2b5cc8"
 
 http_archive(
     name = "bazel_json",

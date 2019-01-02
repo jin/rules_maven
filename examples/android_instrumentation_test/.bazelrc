@@ -1,2 +1,0 @@
-# See https://github.com/erickj/bazel_json/pull/1 
-build --incompatible_disallow_slash_operator=false

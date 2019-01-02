@@ -18,11 +18,8 @@ List the top-level Maven artifacts and servers in the WORKSPACE:
 ```python
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-BAZEL_JSON_COMMIT = "0d26dfd8d22c8d5476f1e49f6a9547e0f030fb8f"
+BAZEL_JSON_COMMIT = "e954ef2c28cd92d97304810e8999e1141e2b5cc8"
 
-# This causes the build to require `--incompatible_disallow_slash_operator=false`.
-# See https://github.com/erickj/bazel_json/pull/1
-# For convenience, add `build --incompatible_disallow_slash_operator=false` to your .bazelrc.
 http_archive(
     name = "bazel_json",
     strip_prefix = "bazel_json-%s" % BAZEL_JSON_COMMIT,

@@ -1,4 +1,1 @@
-alias(
-    name = "rules_maven",
-    actual = ":defs.bzl",
-)
+exports_files(["defs.bzl"])

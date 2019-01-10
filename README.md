@@ -7,9 +7,11 @@
 Transitive Maven artifact repository rule implementation that just depends on
 the `coursier` CLI tool.
 
-This is a experimental proof of concept; support is on a best-effort basis.
+> This was made to be a proof of concept to demonstrate how Maven dependency
+resolution can be done in a [Bazel Android
+project](https://github.com/jaredsburrows/android-bazel-java-app-template).
 
-Tested on Windows, macOS, Linux.
+Support is on a best-effort basis.
 
 ## Features
 

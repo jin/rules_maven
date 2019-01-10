@@ -9,7 +9,9 @@ the `coursier` CLI tool.
 
 > This was made to be a proof of concept to demonstrate how Maven dependency
 resolution can be done in a [Bazel Android
-project](https://github.com/jaredsburrows/android-bazel-java-app-template).
+project](https://github.com/jaredsburrows/android-bazel-java-app-template), and
+to be a possible replacement for
+[gmaven_rules](https://github.com/bazelbuild/gmaven_rules).
 
 Support is on a best-effort basis.
 

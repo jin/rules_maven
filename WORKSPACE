@@ -24,9 +24,11 @@ maven_install(
         "org.mockito:mockito-core:2.22.0",
         "org.springframework:spring-core:5.1.3.RELEASE",
     ],
+    fetch_sources = True,
     repositories = [
         "https://bintray.com/bintray/jcenter",
         "https://maven.google.com",
+        "https://repo1.maven.org/maven2",
     ],
 )
 

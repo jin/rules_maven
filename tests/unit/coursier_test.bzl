@@ -19,8 +19,18 @@ def _coursier_test_impl(ctx):
     env = unittest.begin(ctx)
     mock_repository_ctx = _mock_repository_ctx()
 
-    for (json_input, expected_build_file) in TEST_PAIRS:
-        GUAVA_ACTUAL_BUILD = generate_imports(mock_repository_ctx, json_parse(json_input), {})
+    for (json_inputs, expected_build_file) in TEST_PAIRS:
+        (json_input, srcs_json_input) = json_inputs
+        srcs_dep_tree = None
+        if srcs_json_input != None:
+            srcs_dep_tree = json_parse(srcs_json_input)
+
+        GUAVA_ACTUAL_BUILD = generate_imports(
+            dep_tree = json_parse(json_input),
+            repository_ctx = mock_repository_ctx,
+            seen_imports = {},
+            srcs_dep_tree = srcs_dep_tree,
+        )
         asserts.equals(env, expected_build_file, GUAVA_ACTUAL_BUILD)
 
     unittest.end(env)

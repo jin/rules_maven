@@ -15,7 +15,8 @@ Tested on Windows, macOS, Linux.
 
 * WORKSPACE configuration
 * JAR, AAR, source JARs
-* Custom Maven servers
+* Custom Maven repositories
+* Private Maven repositories with HTTP Basic Authentication
 * Reuse artifacts from a central Coursier cache
 * Supported on Windows, macOS, Linux
 
@@ -42,6 +43,8 @@ maven_install(
         "androidx.test.espresso:espresso-core:3.1.1",
     ],
     repositories = [
+        # Private repositories are supported through HTTP Basic auth
+        "http://username:password@localhost:8081/artifactory/my-repository",
         "https://bintray.com/bintray/jcenter",
         "https://maven.google.com",
         "https://repo1.maven.org/maven2",

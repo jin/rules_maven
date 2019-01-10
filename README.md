@@ -186,6 +186,6 @@ You can find demos in the [`examples/`](./examples/) directory.
 - [x] more tests
 - [x] srcjar support
 - [x] support more packaging types than just aar, jar, and bundle
+- [x] authentication to private repositories
 - [ ] java_plugin / annotation processor support
 - [ ] migration script from gmaven_rules 
-- [ ] authentication

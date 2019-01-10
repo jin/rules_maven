@@ -9,7 +9,15 @@ the `coursier` CLI tool.
 
 This is a experimental proof of concept; support is on a best-effort basis.
 
-Tested on Windows, macOS, Linux. 
+Tested on Windows, macOS, Linux.
+
+## Features
+
+* WORKSPACE configuration
+* JAR, AAR, source JARs
+* Custom Maven servers
+* Reuse artifacts from a central Coursier cache
+* Supported on Windows, macOS, Linux
 
 ## Usage
 
@@ -36,7 +44,11 @@ maven_install(
     repositories = [
         "https://bintray.com/bintray/jcenter",
         "https://maven.google.com",
+        "https://repo1.maven.org/maven2",
     ],
+    # Fetch srcjars as well.
+    # Defaults to false.
+    fetch_sources = True,
 )
 ```
 
@@ -161,11 +173,6 @@ You can find demos in the [`examples/`](./examples/) directory.
 - Don't reimplement the artifact resolver's semantics; reuse it
 - No need to specify any transitive dependency of the top level artifact
 
-## Known issues
-
-### Windows
-
-- The repository rule generates very long paths, and this is an issue on Windows.
 ## TODO
 
 - [x] don't symlink to the basename; symlink to the fqn-derived path
@@ -174,8 +181,8 @@ You can find demos in the [`examples/`](./examples/) directory.
 - [x] don't reexport the entire transitive closure; create the internal tree of java/aar_import based on the pom deps
 - [x] [load test with different artifacts](./WORKSPACE)
 - [x] more tests
+- [x] srcjar support
+- [x] support more packaging types than just aar, jar, and bundle
 - [ ] java_plugin / annotation processor support
 - [ ] migration script from gmaven_rules 
-- [ ] srcjar support
 - [ ] authentication
-- [ ] support more packaging types than just aar, jar, and bundle

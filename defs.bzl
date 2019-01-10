@@ -15,10 +15,11 @@ load("@rules_maven//:coursier.bzl", "coursier_fetch")
 
 REPOSITORY_NAME = "maven"
 
-def maven_install(repositories = [], artifacts = []):
+def maven_install(repositories = [], artifacts = [], fetch_sources = False):
     coursier_fetch(
         name = REPOSITORY_NAME,
         artifacts = artifacts,
+        fetch_sources = fetch_sources,
         repositories = repositories,
     )
 

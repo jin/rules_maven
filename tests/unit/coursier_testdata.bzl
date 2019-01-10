@@ -53,6 +53,144 @@ GUAVA_JSON_INPUT = """{
   "version": "0.1.0"
 }"""
 
+GUAVA_SRCS_JSON_INPUT = """{
+  "conflict_resolution": {},
+  "dependencies": [
+    {
+      "coord": "com.google.code.findbugs:jsr305:jar:sources:3.0.2",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar",
+      "dependencies": []
+    },
+    {
+      "coord": "com.google.errorprone:error_prone_annotations:jar:sources:2.2.0",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0-sources.jar",
+      "dependencies": []
+    },
+    {
+      "coord": "com.google.guava:failureaccess:jar:sources:1.0",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/guava/failureaccess/1.0/failureaccess-1.0-sources.jar",
+      "dependencies": []
+    },
+    {
+      "coord": "com.google.guava:guava:jar:sources:27.0-jre",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/guava/guava/27.0-jre/guava-27.0-jre-sources.jar",
+      "dependencies": [
+        "com.google.code.findbugs:jsr305:jar:sources:3.0.2",
+        "org.codehaus.mojo:animal-sniffer-annotations:jar:sources:1.17",
+        "com.google.j2objc:j2objc-annotations:jar:sources:1.1",
+        "org.checkerframework:checker-qual:jar:sources:2.5.2",
+        "com.google.guava:listenablefuture:jar:sources:9999.0-empty-to-avoid-conflict-with-guava",
+        "com.google.errorprone:error_prone_annotations:jar:sources:2.2.0",
+        "com.google.guava:failureaccess:jar:sources:1.0"
+      ]
+    },
+    {
+      "coord": "com.google.guava:listenablefuture:jar:sources:9999.0-empty-to-avoid-conflict-with-guava",
+      "file": null,
+      "dependencies": []
+    },
+    {
+      "coord": "com.google.j2objc:j2objc-annotations:jar:sources:1.1",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1-sources.jar",
+      "dependencies": []
+    },
+    {
+      "coord": "jline:jline:jar:sources:2.14.6",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/jline/jline/2.14.6/jline-2.14.6-sources.jar",
+      "dependencies": []
+    },
+    {
+      "coord": "org.checkerframework:checker-qual:jar:sources:2.5.2",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2-sources.jar",
+      "dependencies": []
+    },
+    {
+      "coord": "org.codehaus.mojo:animal-sniffer-annotations:jar:sources:1.17",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17-sources.jar",
+      "dependencies": []
+    },
+    {
+      "coord": "org.scala-lang.modules:scala-parser-combinators_2.12:jar:sources:1.0.7",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.0.7/scala-parser-combinators_2.12-1.0.7-sources.jar",
+      "dependencies": [
+        "org.scala-lang:scala-library:jar:sources:2.12.6"
+      ]
+    },
+    {
+      "coord": "org.scala-lang.modules:scala-swing_2.12:jar:sources:2.0.0",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-swing_2.12/2.0.0/scala-swing_2.12-2.0.0-sources.jar",
+      "dependencies": [
+        "org.scala-lang:scala-library:jar:sources:2.12.6"
+      ]
+    },
+    {
+      "coord": "org.scala-lang.modules:scala-xml_2.12:jar:sources:1.0.6",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.0.6/scala-xml_2.12-1.0.6-sources.jar",
+      "dependencies": [
+        "org.scala-lang:scala-library:jar:sources:2.12.6"
+      ]
+    },
+    {
+      "coord": "org.scala-lang:scala-compiler:jar:sources:2.12.6",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.6/scala-compiler-2.12.6-sources.jar",
+      "dependencies": [
+        "org.scala-lang.modules:scala-xml_2.12:jar:sources:1.0.6",
+        "org.scala-lang:scala-library:jar:sources:2.12.6",
+        "org.scala-lang:scala-reflect:jar:sources:2.12.6"
+      ]
+    },
+    {
+      "coord": "org.scala-lang:scala-dist:jar:sources:2.12.6",
+      "file": null,
+      "dependencies": [
+        "org.scala-lang:scala-library-all:jar:sources:2.12.6",
+        "org.scala-lang.modules:scala-parser-combinators_2.12:jar:sources:1.0.7",
+        "jline:jline:jar:sources:2.14.6",
+        "org.scala-lang.modules:scala-xml_2.12:jar:sources:1.0.6",
+        "org.scala-lang:scala-reflect:jar:sources:2.12.6",
+        "org.scala-lang:scala-library:jar:sources:2.12.6",
+        "org.scala-lang:scalap:jar:sources:2.12.6",
+        "org.scala-lang:scala-compiler:jar:sources:2.12.6",
+        "org.scala-lang.modules:scala-swing_2.12:jar:sources:2.0.0"
+      ]
+    },
+    {
+      "coord": "org.scala-lang:scala-library-all:jar:sources:2.12.6",
+      "file": null,
+      "dependencies": [
+        "org.scala-lang.modules:scala-parser-combinators_2.12:jar:sources:1.0.7",
+        "org.scala-lang.modules:scala-xml_2.12:jar:sources:1.0.6",
+        "org.scala-lang:scala-reflect:jar:sources:2.12.6",
+        "org.scala-lang:scala-library:jar:sources:2.12.6",
+        "org.scala-lang.modules:scala-swing_2.12:jar:sources:2.0.0"
+      ]
+    },
+    {
+      "coord": "org.scala-lang:scala-library:jar:sources:2.12.6",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.6/scala-library-2.12.6-sources.jar",
+      "dependencies": []
+    },
+    {
+      "coord": "org.scala-lang:scala-reflect:jar:sources:2.12.6",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.6/scala-reflect-2.12.6-sources.jar",
+      "dependencies": [
+        "org.scala-lang:scala-library:jar:sources:2.12.6"
+      ]
+    },
+    {
+      "coord": "org.scala-lang:scalap:jar:sources:2.12.6",
+      "file": "/Users/username/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scalap/2.12.6/scalap-2.12.6-sources.jar",
+      "dependencies": [
+        "org.scala-lang.modules:scala-xml_2.12:jar:sources:1.0.6",
+        "org.scala-lang:scala-library:jar:sources:2.12.6",
+        "org.scala-lang:scala-compiler:jar:sources:2.12.6",
+        "org.scala-lang:scala-reflect:jar:sources:2.12.6"
+      ]
+    }
+  ],
+  "version": "0.1.0"
+}"""
+
 GUAVA_EXPECTED_BUILD = """java_import(
 	name = "com_google_code_findbugs_jsr305_3_0_2",
 	jars = ["https/repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"],
@@ -105,6 +243,69 @@ java_import(
 java_import(
 	name = "org_codehaus_mojo_animal_sniffer_annotations_1_17",
 	jars = ["https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar"],
+	deps = [
+	],
+)"""
+
+GUAVA_EXPECTED_BUILD_WITH_SRCS = """java_import(
+	name = "com_google_code_findbugs_jsr305_3_0_2",
+	jars = ["https/repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"],
+	srcjar = "https/repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2-sources.jar",
+	deps = [
+	],
+)
+java_import(
+	name = "com_google_errorprone_error_prone_annotations_2_2_0",
+	jars = ["https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0.jar"],
+	srcjar = "https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0-sources.jar",
+	deps = [
+	],
+)
+java_import(
+	name = "com_google_guava_failureaccess_1_0",
+	jars = ["https/repo1.maven.org/maven2/com/google/guava/failureaccess/1.0/failureaccess-1.0.jar"],
+	srcjar = "https/repo1.maven.org/maven2/com/google/guava/failureaccess/1.0/failureaccess-1.0-sources.jar",
+	deps = [
+	],
+)
+java_import(
+	name = "com_google_guava_guava_27_0_jre",
+	jars = ["https/repo1.maven.org/maven2/com/google/guava/guava/27.0-jre/guava-27.0-jre.jar"],
+	srcjar = "https/repo1.maven.org/maven2/com/google/guava/guava/27.0-jre/guava-27.0-jre-sources.jar",
+	deps = [
+		":com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava",
+		":com_google_code_findbugs_jsr305_3_0_2",
+		":com_google_guava_failureaccess_1_0",
+		":org_codehaus_mojo_animal_sniffer_annotations_1_17",
+		":com_google_j2objc_j2objc_annotations_1_1",
+		":com_google_errorprone_error_prone_annotations_2_2_0",
+		":org_checkerframework_checker_qual_2_5_2",
+	],
+)
+java_import(
+	name = "com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava",
+	jars = ["https/repo1.maven.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"],
+	deps = [
+	],
+)
+java_import(
+	name = "com_google_j2objc_j2objc_annotations_1_1",
+	jars = ["https/repo1.maven.org/maven2/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar"],
+	srcjar = "https/repo1.maven.org/maven2/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1-sources.jar",
+	deps = [
+	],
+)
+java_import(
+	name = "org_checkerframework_checker_qual_2_5_2",
+	jars = ["https/repo1.maven.org/maven2/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar"],
+	srcjar = "https/repo1.maven.org/maven2/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2-sources.jar",
+	deps = [
+	],
+)
+java_import(
+	name = "org_codehaus_mojo_animal_sniffer_annotations_1_17",
+	jars = ["https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar"],
+	srcjar = "https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17-sources.jar",
 	deps = [
 	],
 )"""
@@ -1109,6 +1310,16 @@ aar_import(
 )"""
 
 TEST_PAIRS = [
-    (GUAVA_JSON_INPUT, GUAVA_EXPECTED_BUILD),
-    (ANDROID_DESIGN_JSON_INPUT, ANDROID_DESIGN_EXPECTED_BUILD),
+    (
+        (GUAVA_JSON_INPUT, None),
+        GUAVA_EXPECTED_BUILD,
+    ),
+    (
+        (GUAVA_JSON_INPUT, GUAVA_SRCS_JSON_INPUT),
+        GUAVA_EXPECTED_BUILD_WITH_SRCS,
+    ),
+    (
+        (ANDROID_DESIGN_JSON_INPUT, None),
+        ANDROID_DESIGN_EXPECTED_BUILD,
+    ),
 ]

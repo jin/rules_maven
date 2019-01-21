@@ -28,6 +28,12 @@ def _escape(string):
 def _is_windows(repository_ctx):
     return repository_ctx.os.name.find("windows") != -1
 
+def _is_linux(repository_ctx):
+    return repository_ctx.os.name.find("linux") != -1
+
+def _is_macos(repository_ctx):
+    return repository_ctx.os.name.find("mac") != -1
+
 # Relativize an absolute path to an artifact in coursier's default cache location.
 # After relativizing, also symlink the path into the workspace's output base.
 # Then return the relative path for further processing
@@ -58,6 +64,7 @@ def _relativize_and_symlink_file(repository_ctx, absolute_path):
 def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = None):
     # The list of java_import/aar_import declaration strings to be joined at the end
     all_imports = []
+    checksums = {}
 
     # First collect a map of target_label to their srcjar relative paths, and symlink the srcjars.
     # We will use this map later while generating target declaration strings with the "srcjar" attr.
@@ -75,10 +82,16 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
     # Iterate through the list of artifacts, and generate the target declaration strings.
     for artifact in dep_tree["dependencies"]:
         absolute_path_to_artifact = artifact["file"]
-
         # Skip if we've seen this absolute path before.
         if absolute_path_to_artifact not in seen_imports and absolute_path_to_artifact != None:
             seen_imports[absolute_path_to_artifact] = True
+            checksums[artifact["coord"]] = {}
+
+            if _is_macos(repository_ctx):
+                sha256 = repository_ctx.execute(["bash", "-c", "shasum -a256 " + artifact["file"] + "| cut -d\" \" -f1 | tr -d '\n'"]).stdout
+                checksums[artifact["coord"]]["sha256"] = sha256
+
+
             artifact_relative_path = _relativize_and_symlink_file(repository_ctx, absolute_path_to_artifact)
 
             # 1. Generate the rule class.
@@ -159,7 +172,7 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
                  " was not downloaded. Perhaps the packaging type is not one of: jar, aar, bundle?\n" +
                  "Parsed artifact data:" + repr(artifact))
 
-    return "\n".join(all_imports)
+    return ("\n".join(all_imports), checksums)
 
 # Generate the base `coursier` command depending on the OS, JAVA_HOME or the
 # location of `java`.
@@ -247,12 +260,14 @@ def _coursier_fetch_impl(repository_ctx):
             fail("Error while fetching artifact sources with coursier: " + exec_result.stderr)
         srcs_dep_tree = json_parse(_cat_file(repository_ctx, "src-dep-tree.json"))
 
-    imports.append(generate_imports(
+    (generated_imports, checksums) = generate_imports(
         dep_tree = dep_tree,
         repository_ctx = repository_ctx,
         seen_imports = seen_imports,
         srcs_dep_tree = srcs_dep_tree,
-    ))
+    )
+
+    imports.append(generated_imports)
 
     repository_ctx.file(
         "BUILD",
@@ -265,10 +280,7 @@ def _coursier_fetch_impl(repository_ctx):
         "repositories": repository_ctx.attr.repositories,
         "artifacts": repository_ctx.attr.artifacts,
         "fetch_sources": repository_ctx.attr.fetch_sources,
-        "checksums": {
-            "com.example:artifact1:1.0.0": "abcdef123",
-            "com.example:artifact2:1.0.0": "abcdef321",
-        },
+        "checksums": checksums,
     }
 
 coursier_fetch = repository_rule(

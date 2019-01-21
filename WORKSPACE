@@ -15,7 +15,6 @@ maven_install(
         "com.google.android.gms:play-services-maps:16.0.0",
         "com.google.code.gson:gson:2.8.5",
         "com.google.guava:guava:27.0-android",
-        # "com.google.guava:guava:27.0-jre",
         "com.google.inject:guice:4.0",
         "commons-io:commons-io:2.6",
         "io.reactivex.rxjava2:rxjava:2.2.4",
@@ -28,6 +27,17 @@ maven_install(
     repositories = [
         "https://bintray.com/bintray/jcenter",
         "https://maven.google.com",
+        "https://repo1.maven.org/maven2",
+    ],
+)
+
+maven_install(
+    name = "other_maven",
+    artifacts = [
+        "com.google.guava:guava:27.0-jre",
+    ],
+    fetch_sources = True,
+    repositories = [
         "https://repo1.maven.org/maven2",
     ],
 )

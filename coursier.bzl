@@ -22,6 +22,9 @@ package(default_visibility = ["//visibility:public"])
 def _strip_packaging_and_classifier(coord):
     return coord.replace(":jar:", ":").replace(":aar:", ":").replace(":sources:", ":")
 
+def _strip_packaging_and_classifier_and_version(coord):
+    return ":".join(_strip_packaging_and_classifier(coord).split(":")[:-1])
+
 def _escape(string):
     return string.replace(".", "_").replace("-", "_").replace(":", "_").replace("/", "_").replace("[", "").replace("]", "").split(",")[0]
 
@@ -85,12 +88,13 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
         # Skip if we've seen this absolute path before.
         if absolute_path_to_artifact not in seen_imports and absolute_path_to_artifact != None:
             seen_imports[absolute_path_to_artifact] = True
+
+            # We don't set the path of the artifact in resolved.bzl because it's different on everyone's machines
             checksums[artifact["coord"]] = {}
 
             if _is_macos(repository_ctx):
                 sha256 = repository_ctx.execute(["bash", "-c", "shasum -a256 " + artifact["file"] + "| cut -d\" \" -f1 | tr -d '\n'"]).stdout
                 checksums[artifact["coord"]]["sha256"] = sha256
-
 
             artifact_relative_path = _relativize_and_symlink_file(repository_ctx, absolute_path_to_artifact)
 
@@ -112,7 +116,10 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
             # 	name = "org_hamcrest_hamcrest_library_1_3",
             #
             target_label = _escape(_strip_packaging_and_classifier(artifact["coord"]))
+            target_alias_label = _escape(_strip_packaging_and_classifier_and_version(artifact["coord"]))
             target_import_string.append("\tname = \"%s\"," % target_label)
+
+            all_imports.append("alias(\n\tname = \"%s\",\n\tactual = \"%s\")" % (target_alias_label, target_label))
 
             # 3. Generate the jars/aar attribute to the relative path of the artifact.
             #    Optionally generate srcjar attr too.

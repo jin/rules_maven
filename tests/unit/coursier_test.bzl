@@ -3,6 +3,9 @@ load("//third_party/bazel_json/lib:json_parser.bzl", "json_parse")
 load(":coursier_testdata.bzl", "TEST_PAIRS")
 load("//:coursier.bzl", "generate_imports")
 
+def _mock_repository_ctx_os_fn():
+    return { name: "" }
+
 def _mock_1_arity_fn(unused):
     pass
 
@@ -13,6 +16,7 @@ def _mock_repository_ctx():
     return struct(
         path = _mock_1_arity_fn,
         symlink = _mock_2_arity_fn,
+        os = _mock_repository_ctx_os_fn,
     )
 
 def _coursier_test_impl(ctx):

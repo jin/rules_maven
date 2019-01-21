@@ -129,8 +129,14 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
             #
             target_import_string.append("\tdeps = [")
             artifact_deps = artifact["dependencies"]
+            # Dedupe dependencies here. Sometimes coursier will return "x.y:z:aar:version" and "x.y:z:version" in the
+            # same list of dependencies.
+            seen_dep_labels = {}
             for dep in artifact_deps:
-                target_import_string.append("\t\t\":%s\"," % _escape(_strip_packaging_and_classifier(dep)))
+                dep_target_label = _escape(_strip_packaging_and_classifier(dep))
+                if dep_target_label not in seen_dep_labels:
+                    seen_dep_labels[dep_target_label] = True
+                    target_import_string.append("\t\t\":%s\"," % dep_target_label)
             target_import_string.append("\t],")
 
             # 5. Conclude.
@@ -200,57 +206,70 @@ def _coursier_fetch_impl(repository_ctx):
     # seen_imports :: string -> bool
     seen_imports = {}
 
-    for fqn in repository_ctx.attr.artifacts:
+    cmd = _generate_coursier_command(repository_ctx)
+    cmd.extend(["fetch"])
+    cmd.extend(repository_ctx.attr.artifacts)
+    cmd.extend(["--artifact-type", "jar,aar,bundle"])
+    cmd.append("--quiet")
+    cmd.append("--no-default")
+    cmd.extend(["--json-output-file", "dep-tree.json"])
+    for repository in repository_ctx.attr.repositories:
+        cmd.extend(["--repository", repository])
+    if _is_windows(repository_ctx):
+        # Unfortunately on Windows, coursier crashes while trying to acquire the
+        # cache's .structure.lock file while running in parallel. This does not
+        # happen on *nix.
+        cmd.extend(["--parallel", "1"])
+
+    exec_result = repository_ctx.execute(cmd)
+    if (exec_result.return_code != 0):
+        fail("Error while fetching artifact with coursier: " + exec_result.stderr)
+
+    # Once coursier finishes a fetch, it generates a tree of artifacts and their
+    # transitive dependencies in a JSON file. We use that as the source of truth
+    # to generate the repository's BUILD file.
+    dep_tree = json_parse(_cat_file(repository_ctx, "dep-tree.json"))
+
+    srcs_dep_tree = None
+    if repository_ctx.attr.fetch_sources:
         cmd = _generate_coursier_command(repository_ctx)
-        cmd.extend(["fetch", fqn])
-        cmd.extend(["--artifact-type", "jar,aar,bundle"])
+        cmd.extend(["fetch"])
+        cmd.extend(repository_ctx.attr.artifacts)
+        cmd.extend(["--artifact-type", "jar,aar,bundle,src"])
         cmd.append("--quiet")
         cmd.append("--no-default")
-        cmd.extend(["--json-output-file", "dep-tree.json"])
+        cmd.extend(["--sources", "true"])
+        cmd.extend(["--json-output-file", "src-dep-tree.json"])
         for repository in repository_ctx.attr.repositories:
             cmd.extend(["--repository", repository])
-        if _is_windows(repository_ctx):
-            # Unfortunately on Windows, coursier crashes while trying to acquire the
-            # cache's .structure.lock file while running in parallel. This does not
-            # happen on *nix.
-            cmd.extend(["--parallel", "1"])
         exec_result = repository_ctx.execute(cmd)
         if (exec_result.return_code != 0):
-            fail("Error while fetching artifact with coursier: " + exec_result.stderr)
+            fail("Error while fetching artifact sources with coursier: " + exec_result.stderr)
+        srcs_dep_tree = json_parse(_cat_file(repository_ctx, "src-dep-tree.json"))
 
-        # Once coursier finishes a fetch, it generates a tree of artifacts and their
-        # transitive dependencies in a JSON file. We use that as the source of truth
-        # to generate the repository's BUILD file.
-        dep_tree = json_parse(_cat_file(repository_ctx, "dep-tree.json"))
-
-        srcs_dep_tree = None
-        if repository_ctx.attr.fetch_sources:
-            cmd = _generate_coursier_command(repository_ctx)
-            cmd.extend(["fetch", fqn])
-            cmd.extend(["--artifact-type", "jar,aar,bundle,src"])
-            cmd.append("--quiet")
-            cmd.append("--no-default")
-            cmd.extend(["--sources", "true"])
-            cmd.extend(["--json-output-file", "src-dep-tree.json"])
-            for repository in repository_ctx.attr.repositories:
-                cmd.extend(["--repository", repository])
-            exec_result = repository_ctx.execute(cmd)
-            if (exec_result.return_code != 0):
-                fail("Error while fetching artifact sources with coursier: " + exec_result.stderr)
-            srcs_dep_tree = json_parse(_cat_file(repository_ctx, "src-dep-tree.json"))
-
-        imports.append(generate_imports(
-            dep_tree = dep_tree,
-            repository_ctx = repository_ctx,
-            seen_imports = seen_imports,
-            srcs_dep_tree = srcs_dep_tree,
-        ))
+    imports.append(generate_imports(
+        dep_tree = dep_tree,
+        repository_ctx = repository_ctx,
+        seen_imports = seen_imports,
+        srcs_dep_tree = srcs_dep_tree,
+    ))
 
     repository_ctx.file(
         "BUILD",
         _BUILD.format(imports = "\n".join(imports)),
         False,  # not executable
     )
+
+    return {
+        "name": repository_ctx.attr.name,
+        "repositories": repository_ctx.attr.repositories,
+        "artifacts": repository_ctx.attr.artifacts,
+        "fetch_sources": repository_ctx.attr.fetch_sources,
+        "checksums": {
+            "com.example:artifact1:1.0.0": "abcdef123",
+            "com.example:artifact2:1.0.0": "abcdef321",
+        },
+    }
 
 coursier_fetch = repository_rule(
     attrs = {

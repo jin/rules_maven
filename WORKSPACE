@@ -15,7 +15,7 @@ maven_install(
         "com.google.android.gms:play-services-maps:16.0.0",
         "com.google.code.gson:gson:2.8.5",
         "com.google.guava:guava:27.0-android",
-        "com.google.guava:guava:27.0-jre",
+        # "com.google.guava:guava:27.0-jre",
         "com.google.inject:guice:4.0",
         "commons-io:commons-io:2.6",
         "io.reactivex.rxjava2:rxjava:2.2.4",

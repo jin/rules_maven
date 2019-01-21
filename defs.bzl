@@ -15,16 +15,19 @@ load("@rules_maven//:coursier.bzl", "coursier_fetch")
 
 REPOSITORY_NAME = "maven"
 
-def maven_install(repositories = [], artifacts = [], fetch_sources = False):
+def maven_install(name = REPOSITORY_NAME, repositories = [], artifacts = [], fetch_sources = False):
     coursier_fetch(
-        name = REPOSITORY_NAME,
+        name = name,
         artifacts = artifacts,
         fetch_sources = fetch_sources,
         repositories = repositories,
     )
 
-def artifact(fqn):
+def maven_artifact(fqn):
     return "@%s//:%s" % (REPOSITORY_NAME, _escape_fqn(fqn))
+
+def artifact(fqn, name = REPOSITORY_NAME):
+    return "@%s//:%s" % (name, _escape_fqn(fqn))
 
 def _escape_fqn(fqn):
     parts = fqn.split(":")

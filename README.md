@@ -133,7 +133,7 @@ android_binary(
     name = "my_android_app",
     srcs = ...
     deps = [
-        # a versionless alias to @android_app//:com_google_guava_guava_27_0_jre
+        # a versionless alias to @android_app//:com_google_guava_guava_27_0_android
         "@android_app//:com_google_guava_guava",
         # or artifact("com.google.guava:guava", name = "android_app")
     ]

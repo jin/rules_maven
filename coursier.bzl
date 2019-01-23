@@ -22,11 +22,20 @@ package(default_visibility = ["//visibility:public"])
 def _strip_packaging_and_classifier(coord):
     return coord.replace(":jar:", ":").replace(":aar:", ":").replace(":sources:", ":")
 
+def _strip_packaging_and_classifier_and_version(coord):
+    return ":".join(_strip_packaging_and_classifier(coord).split(":")[:-1])
+
 def _escape(string):
     return string.replace(".", "_").replace("-", "_").replace(":", "_").replace("/", "_").replace("[", "").replace("]", "").split(",")[0]
 
 def _is_windows(repository_ctx):
     return repository_ctx.os.name.find("windows") != -1
+
+def _is_linux(repository_ctx):
+    return repository_ctx.os.name.find("linux") != -1
+
+def _is_macos(repository_ctx):
+    return repository_ctx.os.name.find("mac") != -1
 
 # Relativize an absolute path to an artifact in coursier's default cache location.
 # After relativizing, also symlink the path into the workspace's output base.
@@ -55,9 +64,18 @@ def _relativize_and_symlink_file(repository_ctx, absolute_path):
 # tree.
 #
 # Made function public for testing.
-def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = None):
+def generate_imports(repository_ctx, dep_tree, srcs_dep_tree = None):
     # The list of java_import/aar_import declaration strings to be joined at the end
     all_imports = []
+
+    # A mapping of FQN to the artifact's sha256 checksum
+    checksums = {}
+
+    # A dictionary (set) of coordinates. This is to ensure we don't generate
+    # duplicate labels
+    #
+    # seen_imports :: string -> bool
+    seen_imports = {}
 
     # First collect a map of target_label to their srcjar relative paths, and symlink the srcjars.
     # We will use this map later while generating target declaration strings with the "srcjar" attr.
@@ -75,10 +93,22 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
     # Iterate through the list of artifacts, and generate the target declaration strings.
     for artifact in dep_tree["dependencies"]:
         absolute_path_to_artifact = artifact["file"]
-
         # Skip if we've seen this absolute path before.
         if absolute_path_to_artifact not in seen_imports and absolute_path_to_artifact != None:
             seen_imports[absolute_path_to_artifact] = True
+
+            # We don't set the path of the artifact in resolved.bzl because it's different on everyone's machines
+            checksums[artifact["coord"]] = {}
+
+            if _is_macos(repository_ctx):
+                sha256 = repository_ctx.execute([
+                    "bash", "-c",
+                    "shasum -a256 "
+                    + artifact["file"]
+                    + "| cut -d\" \" -f1 | tr -d '\n'"
+                ]).stdout
+                checksums[artifact["coord"]]["sha256"] = sha256
+
             artifact_relative_path = _relativize_and_symlink_file(repository_ctx, absolute_path_to_artifact)
 
             # 1. Generate the rule class.
@@ -129,8 +159,14 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
             #
             target_import_string.append("\tdeps = [")
             artifact_deps = artifact["dependencies"]
+            # Dedupe dependencies here. Sometimes coursier will return "x.y:z:aar:version" and "x.y:z:version" in the
+            # same list of dependencies.
+            seen_dep_labels = {}
             for dep in artifact_deps:
-                target_import_string.append("\t\t\":%s\"," % _escape(_strip_packaging_and_classifier(dep)))
+                dep_target_label = _escape(_strip_packaging_and_classifier(dep))
+                if dep_target_label not in seen_dep_labels:
+                    seen_dep_labels[dep_target_label] = True
+                    target_import_string.append("\t\t\":%s\"," % dep_target_label)
             target_import_string.append("\t],")
 
             # 5. Conclude.
@@ -147,13 +183,18 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
 
             all_imports.append("\n".join(target_import_string))
 
+            # Also create a versionless alias target
+            target_alias_label = _escape(_strip_packaging_and_classifier_and_version(artifact["coord"]))
+            all_imports.append("alias(\n\tname = \"%s\",\n\tactual = \"%s\",\n)" % (target_alias_label, target_label))
+
+
         elif absolute_path_to_artifact == None:
             fail("The artifact for " +
                  artifact["coord"] +
                  " was not downloaded. Perhaps the packaging type is not one of: jar, aar, bundle?\n" +
                  "Parsed artifact data:" + repr(artifact))
 
-    return "\n".join(all_imports)
+    return ("\n".join(all_imports), checksums)
 
 # Generate the base `coursier` command depending on the OS, JAVA_HOME or the
 # location of `java`.
@@ -191,66 +232,69 @@ def _coursier_fetch_impl(repository_ctx):
     if exec_result.return_code != 0:
         fail("Unable to run coursier: " + exec_result.stderr)
 
-    # The list of generated java_import and aar_import targets
-    # imports :: [string]
-    imports = []
+    cmd = _generate_coursier_command(repository_ctx)
+    cmd.extend(["fetch"])
+    cmd.extend(repository_ctx.attr.artifacts)
+    cmd.extend(["--artifact-type", "jar,aar,bundle"])
+    cmd.append("--quiet")
+    cmd.append("--no-default")
+    cmd.extend(["--json-output-file", "dep-tree.json"])
+    for repository in repository_ctx.attr.repositories:
+        cmd.extend(["--repository", repository])
+    if _is_windows(repository_ctx):
+        # Unfortunately on Windows, coursier crashes while trying to acquire the
+        # cache's .structure.lock file while running in parallel. This does not
+        # happen on *nix.
+        cmd.extend(["--parallel", "1"])
 
-    # A dictionary (set) of coordinates. This is to ensure we don't generate
-    # duplicate labels
-    # seen_imports :: string -> bool
-    seen_imports = {}
+    exec_result = repository_ctx.execute(cmd)
+    if (exec_result.return_code != 0):
+        fail("Error while fetching artifact with coursier: " + exec_result.stderr)
 
-    for fqn in repository_ctx.attr.artifacts:
+    # Once coursier finishes a fetch, it generates a tree of artifacts and their
+    # transitive dependencies in a JSON file. We use that as the source of truth
+    # to generate the repository's BUILD file.
+    dep_tree = json_parse(_cat_file(repository_ctx, "dep-tree.json"))
+
+    srcs_dep_tree = None
+    if repository_ctx.attr.fetch_sources:
         cmd = _generate_coursier_command(repository_ctx)
-        cmd.extend(["fetch", fqn])
-        cmd.extend(["--artifact-type", "jar,aar,bundle"])
+        cmd.extend(["fetch"])
+        cmd.extend(repository_ctx.attr.artifacts)
+        cmd.extend(["--artifact-type", "jar,aar,bundle,src"])
         cmd.append("--quiet")
         cmd.append("--no-default")
-        cmd.extend(["--json-output-file", "dep-tree.json"])
+        cmd.extend(["--sources", "true"])
+        cmd.extend(["--json-output-file", "src-dep-tree.json"])
         for repository in repository_ctx.attr.repositories:
             cmd.extend(["--repository", repository])
-        if _is_windows(repository_ctx):
-            # Unfortunately on Windows, coursier crashes while trying to acquire the
-            # cache's .structure.lock file while running in parallel. This does not
-            # happen on *nix.
-            cmd.extend(["--parallel", "1"])
         exec_result = repository_ctx.execute(cmd)
         if (exec_result.return_code != 0):
-            fail("Error while fetching artifact with coursier: " + exec_result.stderr)
+            fail("Error while fetching artifact sources with coursier: "
+                 + exec_result.stderr)
+        srcs_dep_tree = json_parse(_cat_file(repository_ctx, "src-dep-tree.json"))
 
-        # Once coursier finishes a fetch, it generates a tree of artifacts and their
-        # transitive dependencies in a JSON file. We use that as the source of truth
-        # to generate the repository's BUILD file.
-        dep_tree = json_parse(_cat_file(repository_ctx, "dep-tree.json"))
-
-        srcs_dep_tree = None
-        if repository_ctx.attr.fetch_sources:
-            cmd = _generate_coursier_command(repository_ctx)
-            cmd.extend(["fetch", fqn])
-            cmd.extend(["--artifact-type", "jar,aar,bundle,src"])
-            cmd.append("--quiet")
-            cmd.append("--no-default")
-            cmd.extend(["--sources", "true"])
-            cmd.extend(["--json-output-file", "src-dep-tree.json"])
-            for repository in repository_ctx.attr.repositories:
-                cmd.extend(["--repository", repository])
-            exec_result = repository_ctx.execute(cmd)
-            if (exec_result.return_code != 0):
-                fail("Error while fetching artifact sources with coursier: " + exec_result.stderr)
-            srcs_dep_tree = json_parse(_cat_file(repository_ctx, "src-dep-tree.json"))
-
-        imports.append(generate_imports(
-            dep_tree = dep_tree,
-            repository_ctx = repository_ctx,
-            seen_imports = seen_imports,
-            srcs_dep_tree = srcs_dep_tree,
-        ))
+    (generated_imports, checksums) = generate_imports(
+        repository_ctx = repository_ctx,
+        dep_tree = dep_tree,
+        srcs_dep_tree = srcs_dep_tree,
+    )
 
     repository_ctx.file(
         "BUILD",
-        _BUILD.format(imports = "\n".join(imports)),
+        _BUILD.format(imports = generated_imports),
         False,  # not executable
     )
+
+    # Disable repository resolution behind a private feature flag
+    if repository_ctx.attr._verify_checksums:
+        return {
+            "name": repository_ctx.attr.name,
+            "repositories": repository_ctx.attr.repositories,
+            "artifacts": repository_ctx.attr.artifacts,
+            "fetch_sources": repository_ctx.attr.fetch_sources,
+            "checksums": checksums,
+        }
 
 coursier_fetch = repository_rule(
     attrs = {
@@ -258,6 +302,7 @@ coursier_fetch = repository_rule(
         "repositories": attr.string_list(),  # list of repositories
         "artifacts": attr.string_list(),
         "fetch_sources": attr.bool(default = False),
+        "_verify_checksums": attr.bool(default = False),
     },
     environ = ["JAVA_HOME"],
     implementation = _coursier_fetch_impl,

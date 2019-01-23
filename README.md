@@ -21,7 +21,10 @@ Support is on a best-effort basis.
 * JAR, AAR, source JARs
 * Custom Maven repositories
 * Private Maven repositories with HTTP Basic Authentication
-* Reuse artifacts from a central Coursier cache
+* Artifact version resolution with Coursier
+* Reuse artifacts from a central cache
+* Versionless target labels for simpler dependency management
+* Ability to declare multiple sets of versioned artifacts
 * Supported on Windows, macOS, Linux
 
 ## Usage
@@ -31,7 +34,7 @@ List the top-level Maven artifacts and servers in the WORKSPACE:
 ```python
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-RULES_MAVEN_TAG = "0.0.4" # or latest tag
+RULES_MAVEN_TAG = "0.1.0" # or latest tag
 
 http_archive(
     name = "rules_maven",
@@ -53,13 +56,12 @@ maven_install(
         "https://maven.google.com",
         "https://repo1.maven.org/maven2",
     ],
-    # Fetch srcjars as well.
-    # Defaults to false.
+    # Fetch srcjars. Defaults to False.
     fetch_sources = True,
 )
 ```
 
-and use them directly in the BUILD file:
+and use them directly in the BUILD file by specifying the versionless target alias label:
 
 ```python
 load("@rules_maven//:defs.bzl", "artifact")
@@ -67,11 +69,74 @@ load("@rules_maven//:defs.bzl", "artifact")
 android_library(
     name = "test_deps",
     exports = [
-        artifact("androidx.test.espresso:espresso-core:3.1.1"),
-        # or @maven//:androidx_test_espresso_espresso_core_3_1_1
-        artifact("junit:junit:4.12"),
-        # or @maven//:junit_junit_4_12
+        "@maven//:androidx_test_espresso_espresso_core",
+        # or artifact("androidx.test.espresso:espresso-core"),
+        "@maven//:junit_junit",
+        # or artifact("junit:junit"),
     ],
+)
+```
+
+## Advanced usage
+
+### Multiple `maven_install` declarations for isolated artifact version trees
+
+If your WORKSPACE contains several projects that use different versions of the
+same artifact, you can specify multiple `maven_install` declarations in the
+WORKSPACE, with a unique repository name for each of them.
+
+For example, if you want to use the JRE version of Guava for a server app, and
+the Android version for an Android app, you can specify two `maven_install`
+declarations:
+
+```python
+maven_install(
+    name = "server_app",
+    artifacts = [
+        "com.google.guava:guava:27.0-jre",
+    ],
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
+
+maven_install(
+    name = "android_app",
+    artifacts = [
+        "com.google.guava:guava:27.0-android",
+    ],
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
+```
+
+This way, `rules_maven` will invoke coursier to resolve artifact versions for
+both repositories independent of each other. Coursier will fail if it encounters
+version conflicts that it cannot resolve. The two Guava targets can then be used
+in BUILD files like so:
+
+```python
+load("@rules_maven//:defs.bzl", "artifact")
+
+java_binary(
+    name = "my_server_app",
+    srcs = ...
+    deps = [
+        # a versionless alias to @server_app//:com_google_guava_guava_27_0_jre
+        "@server_app//:com_google_guava_guava",
+        # or artifact("com.google.guava:guava", name = "server_app")
+    ]
+)
+
+android_binary(
+    name = "my_android_app",
+    srcs = ...
+    deps = [
+        # a versionless alias to @android_app//:com_google_guava_guava_27_0_jre
+        "@android_app//:com_google_guava_guava",
+        # or artifact("com.google.guava:guava", name = "android_app")
+    ]
 )
 ```
 
@@ -191,5 +256,8 @@ You can find demos in the [`examples/`](./examples/) directory.
 - [x] srcjar support
 - [x] support more packaging types than just aar, jar, and bundle
 - [x] authentication to private repositories
+- [x] version resolution
+- [x] one version per artifact per `@repository`
+- [x] declare multiple `maven_install` to isolate artifact version trees
 - [ ] java_plugin / annotation processor support
 - [ ] migration script from gmaven_rules 

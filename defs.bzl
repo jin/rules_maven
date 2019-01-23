@@ -15,32 +15,23 @@ load("@rules_maven//:coursier.bzl", "coursier_fetch")
 
 REPOSITORY_NAME = "maven"
 
-def maven_install(repositories = [], artifacts = [], fetch_sources = False):
-    coursier_fetch(
+def maven_install(
         name = REPOSITORY_NAME,
+        repositories = [],
+        artifacts = [],
+        fetch_sources = False):
+    coursier_fetch(
+        name = name,
+        repositories = repositories,
         artifacts = artifacts,
         fetch_sources = fetch_sources,
-        repositories = repositories,
     )
 
-def artifact(fqn):
-    return "@%s//:%s" % (REPOSITORY_NAME, _escape_fqn(fqn))
+def maven_artifact(fqn):
+    return "@%s//:%s" % (REPOSITORY_NAME, _escape(fqn))
 
-def _escape_fqn(fqn):
-    parts = fqn.split(":")
-    packaging = "jar"
-
-    if len(parts) == 3:
-        group_id, artifact_id, version = parts
-    elif len(parts) == 4:
-        group_id, artifact_id, packaging, version = parts
-    elif len(parts) == 5:
-        _, _, _, classifier, _ = parts
-        fail("Classifiers are currently not supported. Please remove it from the coordinate: %s" % classifier)
-    else:
-        fail("Invalid qualified name for artifact: %s" % fqn)
-
-    return "%s_%s_%s" % (_escape(group_id), _escape(artifact_id), _escape(version))
+def artifact(fqn, name = REPOSITORY_NAME):
+    return "@%s//:%s" % (name, _escape(fqn))
 
 def _escape(string):
-    return string.replace(".", "_").replace("-", "_")
+    return string.replace(".", "_").replace("-", "_").replace(":", "_")

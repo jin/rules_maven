@@ -197,17 +197,29 @@ GUAVA_EXPECTED_BUILD = """java_import(
 	deps = [
 	],
 )
+alias(
+	name = "com_google_code_findbugs_jsr305",
+	actual = "com_google_code_findbugs_jsr305_3_0_2",
+)
 java_import(
 	name = "com_google_errorprone_error_prone_annotations_2_2_0",
 	jars = ["https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0.jar"],
 	deps = [
 	],
 )
+alias(
+	name = "com_google_errorprone_error_prone_annotations",
+	actual = "com_google_errorprone_error_prone_annotations_2_2_0",
+)
 java_import(
 	name = "com_google_guava_failureaccess_1_0",
 	jars = ["https/repo1.maven.org/maven2/com/google/guava/failureaccess/1.0/failureaccess-1.0.jar"],
 	deps = [
 	],
+)
+alias(
+	name = "com_google_guava_failureaccess",
+	actual = "com_google_guava_failureaccess_1_0",
 )
 java_import(
 	name = "com_google_guava_guava_27_0_jre",
@@ -222,11 +234,19 @@ java_import(
 		":org_checkerframework_checker_qual_2_5_2",
 	],
 )
+alias(
+	name = "com_google_guava_guava",
+	actual = "com_google_guava_guava_27_0_jre",
+)
 java_import(
 	name = "com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava",
 	jars = ["https/repo1.maven.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"],
 	deps = [
 	],
+)
+alias(
+	name = "com_google_guava_listenablefuture",
+	actual = "com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava",
 )
 java_import(
 	name = "com_google_j2objc_j2objc_annotations_1_1",
@@ -234,17 +254,29 @@ java_import(
 	deps = [
 	],
 )
+alias(
+	name = "com_google_j2objc_j2objc_annotations",
+	actual = "com_google_j2objc_j2objc_annotations_1_1",
+)
 java_import(
 	name = "org_checkerframework_checker_qual_2_5_2",
 	jars = ["https/repo1.maven.org/maven2/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar"],
 	deps = [
 	],
 )
+alias(
+	name = "org_checkerframework_checker_qual",
+	actual = "org_checkerframework_checker_qual_2_5_2",
+)
 java_import(
 	name = "org_codehaus_mojo_animal_sniffer_annotations_1_17",
 	jars = ["https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar"],
 	deps = [
 	],
+)
+alias(
+	name = "org_codehaus_mojo_animal_sniffer_annotations",
+	actual = "org_codehaus_mojo_animal_sniffer_annotations_1_17",
 )"""
 
 GUAVA_EXPECTED_BUILD_WITH_SRCS = """java_import(
@@ -254,6 +286,10 @@ GUAVA_EXPECTED_BUILD_WITH_SRCS = """java_import(
 	deps = [
 	],
 )
+alias(
+	name = "com_google_code_findbugs_jsr305",
+	actual = "com_google_code_findbugs_jsr305_3_0_2",
+)
 java_import(
 	name = "com_google_errorprone_error_prone_annotations_2_2_0",
 	jars = ["https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0.jar"],
@@ -261,12 +297,20 @@ java_import(
 	deps = [
 	],
 )
+alias(
+	name = "com_google_errorprone_error_prone_annotations",
+	actual = "com_google_errorprone_error_prone_annotations_2_2_0",
+)
 java_import(
 	name = "com_google_guava_failureaccess_1_0",
 	jars = ["https/repo1.maven.org/maven2/com/google/guava/failureaccess/1.0/failureaccess-1.0.jar"],
 	srcjar = "https/repo1.maven.org/maven2/com/google/guava/failureaccess/1.0/failureaccess-1.0-sources.jar",
 	deps = [
 	],
+)
+alias(
+	name = "com_google_guava_failureaccess",
+	actual = "com_google_guava_failureaccess_1_0",
 )
 java_import(
 	name = "com_google_guava_guava_27_0_jre",
@@ -282,11 +326,19 @@ java_import(
 		":org_checkerframework_checker_qual_2_5_2",
 	],
 )
+alias(
+	name = "com_google_guava_guava",
+	actual = "com_google_guava_guava_27_0_jre",
+)
 java_import(
 	name = "com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava",
 	jars = ["https/repo1.maven.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"],
 	deps = [
 	],
+)
+alias(
+	name = "com_google_guava_listenablefuture",
+	actual = "com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava",
 )
 java_import(
 	name = "com_google_j2objc_j2objc_annotations_1_1",
@@ -295,6 +347,10 @@ java_import(
 	deps = [
 	],
 )
+alias(
+	name = "com_google_j2objc_j2objc_annotations",
+	actual = "com_google_j2objc_j2objc_annotations_1_1",
+)
 java_import(
 	name = "org_checkerframework_checker_qual_2_5_2",
 	jars = ["https/repo1.maven.org/maven2/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar"],
@@ -302,12 +358,20 @@ java_import(
 	deps = [
 	],
 )
+alias(
+	name = "org_checkerframework_checker_qual",
+	actual = "org_checkerframework_checker_qual_2_5_2",
+)
 java_import(
 	name = "org_codehaus_mojo_animal_sniffer_annotations_1_17",
 	jars = ["https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar"],
 	srcjar = "https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17-sources.jar",
 	deps = [
 	],
+)
+alias(
+	name = "org_codehaus_mojo_animal_sniffer_annotations",
+	actual = "org_codehaus_mojo_animal_sniffer_annotations_1_17",
 )"""
 
 ANDROID_DESIGN_JSON_INPUT = """{
@@ -819,6 +883,10 @@ ANDROID_DESIGN_EXPECTED_BUILD = """java_import(
 		":com_android_support_support_annotations_28_0_0",
 	],
 )
+alias(
+	name = "android_arch_core_common",
+	actual = "android_arch_core_common_1_1_1",
+)
 aar_import(
 	name = "android_arch_core_runtime_1_1_1",
 	aar = "https/maven.google.com/android/arch/core/runtime/1.1.1/runtime-1.1.1.aar",
@@ -827,12 +895,20 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "android_arch_core_runtime",
+	actual = "android_arch_core_runtime_1_1_1",
+)
 java_import(
 	name = "android_arch_lifecycle_common_1_1_1",
 	jars = ["https/maven.google.com/android/arch/lifecycle/common/1.1.1/common-1.1.1.jar"],
 	deps = [
 		":com_android_support_support_annotations_28_0_0",
 	],
+)
+alias(
+	name = "android_arch_lifecycle_common",
+	actual = "android_arch_lifecycle_common_1_1_1",
 )
 aar_import(
 	name = "android_arch_lifecycle_livedata_core_1_1_1",
@@ -843,6 +919,10 @@ aar_import(
 		":android_arch_core_runtime_1_1_1",
 		":android_arch_lifecycle_common_1_1_1",
 	],
+)
+alias(
+	name = "android_arch_lifecycle_livedata_core",
+	actual = "android_arch_lifecycle_livedata_core_1_1_1",
 )
 aar_import(
 	name = "android_arch_lifecycle_livedata_1_1_1",
@@ -855,6 +935,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "android_arch_lifecycle_livedata",
+	actual = "android_arch_lifecycle_livedata_1_1_1",
+)
 aar_import(
 	name = "android_arch_lifecycle_runtime_1_1_1",
 	aar = "https/maven.google.com/android/arch/lifecycle/runtime/1.1.1/runtime-1.1.1.aar",
@@ -864,12 +948,20 @@ aar_import(
 		":android_arch_lifecycle_common_1_1_1",
 	],
 )
+alias(
+	name = "android_arch_lifecycle_runtime",
+	actual = "android_arch_lifecycle_runtime_1_1_1",
+)
 aar_import(
 	name = "android_arch_lifecycle_viewmodel_1_1_1",
 	aar = "https/maven.google.com/android/arch/lifecycle/viewmodel/1.1.1/viewmodel-1.1.1.aar",
 	deps = [
 		":com_android_support_support_annotations_28_0_0",
 	],
+)
+alias(
+	name = "android_arch_lifecycle_viewmodel",
+	actual = "android_arch_lifecycle_viewmodel_1_1_1",
 )
 aar_import(
 	name = "com_android_support_animated_vector_drawable_28_0_0",
@@ -903,6 +995,10 @@ aar_import(
 		":com_android_support_documentfile_28_0_0",
 		":android_arch_core_common_1_1_1",
 	],
+)
+alias(
+	name = "com_android_support_animated_vector_drawable",
+	actual = "com_android_support_animated_vector_drawable_28_0_0",
 )
 aar_import(
 	name = "com_android_support_appcompat_v7_28_0_0",
@@ -939,6 +1035,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_appcompat_v7",
+	actual = "com_android_support_appcompat_v7_28_0_0",
+)
 aar_import(
 	name = "com_android_support_asynclayoutinflater_28_0_0",
 	aar = "https/maven.google.com/com/android/support/asynclayoutinflater/28.0.0/asynclayoutinflater-28.0.0.aar",
@@ -952,6 +1052,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_asynclayoutinflater",
+	actual = "com_android_support_asynclayoutinflater_28_0_0",
+)
 aar_import(
 	name = "com_android_support_cardview_v7_28_0_0",
 	aar = "https/maven.google.com/com/android/support/cardview-v7/28.0.0/cardview-v7-28.0.0.aar",
@@ -959,12 +1063,20 @@ aar_import(
 		":com_android_support_support_annotations_28_0_0",
 	],
 )
+alias(
+	name = "com_android_support_cardview_v7",
+	actual = "com_android_support_cardview_v7_28_0_0",
+)
 java_import(
 	name = "com_android_support_collections_28_0_0",
 	jars = ["https/maven.google.com/com/android/support/collections/28.0.0/collections-28.0.0.jar"],
 	deps = [
 		":com_android_support_support_annotations_28_0_0",
 	],
+)
+alias(
+	name = "com_android_support_collections",
+	actual = "com_android_support_collections_28_0_0",
 )
 aar_import(
 	name = "com_android_support_coordinatorlayout_28_0_0",
@@ -980,12 +1092,20 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_coordinatorlayout",
+	actual = "com_android_support_coordinatorlayout_28_0_0",
+)
 aar_import(
 	name = "com_android_support_cursoradapter_28_0_0",
 	aar = "https/maven.google.com/com/android/support/cursoradapter/28.0.0/cursoradapter-28.0.0.aar",
 	deps = [
 		":com_android_support_support_annotations_28_0_0",
 	],
+)
+alias(
+	name = "com_android_support_cursoradapter",
+	actual = "com_android_support_cursoradapter_28_0_0",
 )
 aar_import(
 	name = "com_android_support_customview_28_0_0",
@@ -999,6 +1119,10 @@ aar_import(
 		":android_arch_lifecycle_common_1_1_1",
 		":android_arch_core_common_1_1_1",
 	],
+)
+alias(
+	name = "com_android_support_customview",
+	actual = "com_android_support_customview_28_0_0",
 )
 aar_import(
 	name = "com_android_support_design_28_0_0",
@@ -1039,12 +1163,20 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_design",
+	actual = "com_android_support_design_28_0_0",
+)
 aar_import(
 	name = "com_android_support_documentfile_28_0_0",
 	aar = "https/maven.google.com/com/android/support/documentfile/28.0.0/documentfile-28.0.0.aar",
 	deps = [
 		":com_android_support_support_annotations_28_0_0",
 	],
+)
+alias(
+	name = "com_android_support_documentfile",
+	actual = "com_android_support_documentfile_28_0_0",
 )
 aar_import(
 	name = "com_android_support_drawerlayout_28_0_0",
@@ -1060,12 +1192,20 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_drawerlayout",
+	actual = "com_android_support_drawerlayout_28_0_0",
+)
 aar_import(
 	name = "com_android_support_interpolator_28_0_0",
 	aar = "https/maven.google.com/com/android/support/interpolator/28.0.0/interpolator-28.0.0.aar",
 	deps = [
 		":com_android_support_support_annotations_28_0_0",
 	],
+)
+alias(
+	name = "com_android_support_interpolator",
+	actual = "com_android_support_interpolator_28_0_0",
 )
 aar_import(
 	name = "com_android_support_loader_28_0_0",
@@ -1084,6 +1224,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_loader",
+	actual = "com_android_support_loader_28_0_0",
+)
 aar_import(
 	name = "com_android_support_localbroadcastmanager_28_0_0",
 	aar = "https/maven.google.com/com/android/support/localbroadcastmanager/28.0.0/localbroadcastmanager-28.0.0.aar",
@@ -1091,12 +1235,20 @@ aar_import(
 		":com_android_support_support_annotations_28_0_0",
 	],
 )
+alias(
+	name = "com_android_support_localbroadcastmanager",
+	actual = "com_android_support_localbroadcastmanager_28_0_0",
+)
 aar_import(
 	name = "com_android_support_print_28_0_0",
 	aar = "https/maven.google.com/com/android/support/print/28.0.0/print-28.0.0.aar",
 	deps = [
 		":com_android_support_support_annotations_28_0_0",
 	],
+)
+alias(
+	name = "com_android_support_print",
+	actual = "com_android_support_print_28_0_0",
 )
 aar_import(
 	name = "com_android_support_recyclerview_v7_28_0_0",
@@ -1130,6 +1282,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_recyclerview_v7",
+	actual = "com_android_support_recyclerview_v7_28_0_0",
+)
 aar_import(
 	name = "com_android_support_slidingpanelayout_28_0_0",
 	aar = "https/maven.google.com/com/android/support/slidingpanelayout/28.0.0/slidingpanelayout-28.0.0.aar",
@@ -1144,11 +1300,19 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_slidingpanelayout",
+	actual = "com_android_support_slidingpanelayout_28_0_0",
+)
 java_import(
 	name = "com_android_support_support_annotations_28_0_0",
 	jars = ["https/maven.google.com/com/android/support/support-annotations/28.0.0/support-annotations-28.0.0.jar"],
 	deps = [
 	],
+)
+alias(
+	name = "com_android_support_support_annotations",
+	actual = "com_android_support_support_annotations_28_0_0",
 )
 aar_import(
 	name = "com_android_support_support_compat_28_0_0",
@@ -1161,6 +1325,10 @@ aar_import(
 		":android_arch_lifecycle_common_1_1_1",
 		":android_arch_core_common_1_1_1",
 	],
+)
+alias(
+	name = "com_android_support_support_compat",
+	actual = "com_android_support_support_compat_28_0_0",
 )
 aar_import(
 	name = "com_android_support_support_core_ui_28_0_0",
@@ -1193,6 +1361,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_support_core_ui",
+	actual = "com_android_support_support_core_ui_28_0_0",
+)
 aar_import(
 	name = "com_android_support_support_core_utils_28_0_0",
 	aar = "https/maven.google.com/com/android/support/support-core-utils/28.0.0/support-core-utils-28.0.0.aar",
@@ -1213,6 +1385,10 @@ aar_import(
 		":com_android_support_documentfile_28_0_0",
 		":android_arch_core_common_1_1_1",
 	],
+)
+alias(
+	name = "com_android_support_support_core_utils",
+	actual = "com_android_support_support_core_utils_28_0_0",
 )
 aar_import(
 	name = "com_android_support_support_fragment_28_0_0",
@@ -1246,6 +1422,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_support_fragment",
+	actual = "com_android_support_support_fragment_28_0_0",
+)
 aar_import(
 	name = "com_android_support_support_vector_drawable_28_0_0",
 	aar = "https/maven.google.com/com/android/support/support-vector-drawable/28.0.0/support-vector-drawable-28.0.0.aar",
@@ -1258,6 +1438,10 @@ aar_import(
 		":android_arch_lifecycle_common_1_1_1",
 		":android_arch_core_common_1_1_1",
 	],
+)
+alias(
+	name = "com_android_support_support_vector_drawable",
+	actual = "com_android_support_support_vector_drawable_28_0_0",
 )
 aar_import(
 	name = "com_android_support_swiperefreshlayout_28_0_0",
@@ -1273,6 +1457,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_swiperefreshlayout",
+	actual = "com_android_support_swiperefreshlayout_28_0_0",
+)
 aar_import(
 	name = "com_android_support_transition_28_0_0",
 	aar = "https/maven.google.com/com/android/support/transition/28.0.0/transition-28.0.0.aar",
@@ -1286,6 +1474,10 @@ aar_import(
 		":android_arch_core_common_1_1_1",
 	],
 )
+alias(
+	name = "com_android_support_transition",
+	actual = "com_android_support_transition_28_0_0",
+)
 aar_import(
 	name = "com_android_support_versionedparcelable_28_0_0",
 	aar = "https/maven.google.com/com/android/support/versionedparcelable/28.0.0/versionedparcelable-28.0.0.aar",
@@ -1293,6 +1485,10 @@ aar_import(
 		":com_android_support_support_annotations_28_0_0",
 		":com_android_support_collections_28_0_0",
 	],
+)
+alias(
+	name = "com_android_support_versionedparcelable",
+	actual = "com_android_support_versionedparcelable_28_0_0",
 )
 aar_import(
 	name = "com_android_support_viewpager_28_0_0",
@@ -1307,6 +1503,10 @@ aar_import(
 		":android_arch_lifecycle_common_1_1_1",
 		":android_arch_core_common_1_1_1",
 	],
+)
+alias(
+	name = "com_android_support_viewpager",
+	actual = "com_android_support_viewpager_28_0_0",
 )"""
 
 TEST_PAIRS = [

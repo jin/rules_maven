@@ -64,10 +64,18 @@ def _relativize_and_symlink_file(repository_ctx, absolute_path):
 # tree.
 #
 # Made function public for testing.
-def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = None):
+def generate_imports(repository_ctx, dep_tree, srcs_dep_tree = None):
     # The list of java_import/aar_import declaration strings to be joined at the end
     all_imports = []
+
+    # A mapping of FQN to the artifact's sha256 checksum
     checksums = {}
+
+    # A dictionary (set) of coordinates. This is to ensure we don't generate
+    # duplicate labels
+    #
+    # seen_imports :: string -> bool
+    seen_imports = {}
 
     # First collect a map of target_label to their srcjar relative paths, and symlink the srcjars.
     # We will use this map later while generating target declaration strings with the "srcjar" attr.
@@ -93,7 +101,12 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
             checksums[artifact["coord"]] = {}
 
             if _is_macos(repository_ctx):
-                sha256 = repository_ctx.execute(["bash", "-c", "shasum -a256 " + artifact["file"] + "| cut -d\" \" -f1 | tr -d '\n'"]).stdout
+                sha256 = repository_ctx.execute([
+                    "bash", "-c",
+                    "shasum -a256 "
+                    + artifact["file"]
+                    + "| cut -d\" \" -f1 | tr -d '\n'"
+                ]).stdout
                 checksums[artifact["coord"]]["sha256"] = sha256
 
             artifact_relative_path = _relativize_and_symlink_file(repository_ctx, absolute_path_to_artifact)
@@ -116,10 +129,7 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
             # 	name = "org_hamcrest_hamcrest_library_1_3",
             #
             target_label = _escape(_strip_packaging_and_classifier(artifact["coord"]))
-            target_alias_label = _escape(_strip_packaging_and_classifier_and_version(artifact["coord"]))
             target_import_string.append("\tname = \"%s\"," % target_label)
-
-            all_imports.append("alias(\n\tname = \"%s\",\n\tactual = \"%s\")" % (target_alias_label, target_label))
 
             # 3. Generate the jars/aar attribute to the relative path of the artifact.
             #    Optionally generate srcjar attr too.
@@ -173,6 +183,11 @@ def generate_imports(repository_ctx, dep_tree, seen_imports, srcs_dep_tree = Non
 
             all_imports.append("\n".join(target_import_string))
 
+            # Also create a versionless alias target
+            target_alias_label = _escape(_strip_packaging_and_classifier_and_version(artifact["coord"]))
+            all_imports.append("alias(\n\tname = \"%s\",\n\tactual = \"%s\",\n)" % (target_alias_label, target_label))
+
+
         elif absolute_path_to_artifact == None:
             fail("The artifact for " +
                  artifact["coord"] +
@@ -217,15 +232,6 @@ def _coursier_fetch_impl(repository_ctx):
     if exec_result.return_code != 0:
         fail("Unable to run coursier: " + exec_result.stderr)
 
-    # The list of generated java_import and aar_import targets
-    # imports :: [string]
-    imports = []
-
-    # A dictionary (set) of coordinates. This is to ensure we don't generate
-    # duplicate labels
-    # seen_imports :: string -> bool
-    seen_imports = {}
-
     cmd = _generate_coursier_command(repository_ctx)
     cmd.extend(["fetch"])
     cmd.extend(repository_ctx.attr.artifacts)
@@ -264,31 +270,31 @@ def _coursier_fetch_impl(repository_ctx):
             cmd.extend(["--repository", repository])
         exec_result = repository_ctx.execute(cmd)
         if (exec_result.return_code != 0):
-            fail("Error while fetching artifact sources with coursier: " + exec_result.stderr)
+            fail("Error while fetching artifact sources with coursier: "
+                 + exec_result.stderr)
         srcs_dep_tree = json_parse(_cat_file(repository_ctx, "src-dep-tree.json"))
 
     (generated_imports, checksums) = generate_imports(
-        dep_tree = dep_tree,
         repository_ctx = repository_ctx,
-        seen_imports = seen_imports,
+        dep_tree = dep_tree,
         srcs_dep_tree = srcs_dep_tree,
     )
 
-    imports.append(generated_imports)
-
     repository_ctx.file(
         "BUILD",
-        _BUILD.format(imports = "\n".join(imports)),
+        _BUILD.format(imports = generated_imports),
         False,  # not executable
     )
 
-    return {
-        "name": repository_ctx.attr.name,
-        "repositories": repository_ctx.attr.repositories,
-        "artifacts": repository_ctx.attr.artifacts,
-        "fetch_sources": repository_ctx.attr.fetch_sources,
-        "checksums": checksums,
-    }
+    # Disable repository resolution behind a private feature flag
+    if repository_ctx.attr._verify_checksums:
+        return {
+            "name": repository_ctx.attr.name,
+            "repositories": repository_ctx.attr.repositories,
+            "artifacts": repository_ctx.attr.artifacts,
+            "fetch_sources": repository_ctx.attr.fetch_sources,
+            "checksums": checksums,
+        }
 
 coursier_fetch = repository_rule(
     attrs = {
@@ -296,6 +302,7 @@ coursier_fetch = repository_rule(
         "repositories": attr.string_list(),  # list of repositories
         "artifacts": attr.string_list(),
         "fetch_sources": attr.bool(default = False),
+        "_verify_checksums": attr.bool(default = False),
     },
     environ = ["JAVA_HOME"],
     implementation = _coursier_fetch_impl,

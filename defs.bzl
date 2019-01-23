@@ -30,8 +30,8 @@ def maven_install(
 def maven_artifact(fqn):
     return "@%s//:%s" % (REPOSITORY_NAME, _escape(fqn))
 
-def artifact(fqn, name = REPOSITORY_NAME):
-    return "@%s//:%s" % (name, _escape(fqn))
+def artifact(fqn, repository_name = REPOSITORY_NAME):
+    return "@%s//:%s" % (repository_name, _escape(fqn))
 
 def _escape(string):
     return string.replace(".", "_").replace("-", "_").replace(":", "_")

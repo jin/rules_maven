@@ -5,7 +5,7 @@ java_binary(
     main_class = "not.used",
     runtime_deps = [
         artifact("com.google.code.gson:gson"),
-        artifact("com.google.guava:guava", name = "other_maven"),
+        artifact("com.google.guava:guava", repository_name = "other_maven"),
         artifact("com.google.inject:guice"),
         artifact("commons-io:commons-io"),
         artifact("io.reactivex.rxjava2:rxjava"),

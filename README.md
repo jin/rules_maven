@@ -124,7 +124,7 @@ java_binary(
     srcs = ...
     deps = [
         # a versionless alias to @server_app//:com_google_guava_guava_27_0_jre
-        @server_app//:com_google_guava_guava
+        "@server_app//:com_google_guava_guava",
         # or artifact("com.google.guava:guava", name = "server_app")
     ]
 )
@@ -134,7 +134,7 @@ android_binary(
     srcs = ...
     deps = [
         # a versionless alias to @android_app//:com_google_guava_guava_27_0_jre
-        @android_app//:com_google_guava_guava
+        "@android_app//:com_google_guava_guava",
         # or artifact("com.google.guava:guava", name = "android_app")
     ]
 )

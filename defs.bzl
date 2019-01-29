@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 
 load("@rules_maven//:coursier.bzl", "coursier_fetch")
+load("@rules_maven//:specs.bzl", "maven", "parse", "json")
 
 REPOSITORY_NAME = "maven"
 
@@ -20,10 +21,19 @@ def maven_install(
         repositories = [],
         artifacts = [],
         fetch_sources = False):
+
+    repositories_json_strings = []
+    for repository in parse.parse_repository_spec_list(repositories):
+        repositories_json_strings.append(json.write_repository_spec(repository))
+
+    artifacts_json_strings = []
+    for artifact in parse.parse_artifact_spec_list(artifacts):
+        artifacts_json_strings.append(json.write_artifact_spec(artifact))
+
     coursier_fetch(
         name = name,
-        repositories = repositories,
-        artifacts = artifacts,
+        repositories = repositories_json_strings,
+        artifacts = artifacts_json_strings,
         fetch_sources = fetch_sources,
     )
 

@@ -29,6 +29,7 @@ maven_install(
         "https://maven.google.com",
         "https://repo1.maven.org/maven2",
     ],
+    use_unsafe_shared_cache = True,
 )
 
 maven_install(

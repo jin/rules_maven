@@ -20,7 +20,8 @@ def maven_install(
         name = REPOSITORY_NAME,
         repositories = [],
         artifacts = [],
-        fetch_sources = False):
+        fetch_sources = False,
+        use_unsafe_shared_cache = False):
 
     repositories_json_strings = []
     for repository in parse.parse_repository_spec_list(repositories):
@@ -35,6 +36,7 @@ def maven_install(
         repositories = repositories_json_strings,
         artifacts = artifacts_json_strings,
         fetch_sources = fetch_sources,
+        use_unsafe_shared_cache = use_unsafe_shared_cache,
     )
 
 def artifact(a, repository_name = REPOSITORY_NAME):
@@ -60,4 +62,3 @@ def _parse_artifact_str(artifact_str):
         return { "group": pieces[0], "artifact": pieces[1] }
     else:
         return parse.parse_maven_coordinate(artifact_str)
-

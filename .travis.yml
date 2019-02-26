@@ -48,6 +48,7 @@ script:
       export ANDROID_HOME=/usr/local/android-sdk
       bazel test //tests/unit/... && \
         ./tests/integration/simple_integration_test.sh
+        ./tests/integration/artifact_exclusions_integration_test.sh
     fi
 
 notifications:

@@ -60,7 +60,6 @@ maven_install(
     repositories = [
         "https://repo1.maven.org/maven2",
     ],
-    use_unsafe_shared_cache = True,
 )
 
 android_sdk_repository(name = "androidsdk")

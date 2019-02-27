@@ -23,7 +23,7 @@ bazel query @other_maven_with_exclusions//:com_google_guava_guava_lib --output=x
   | sort > /tmp/with_exclusions.txt
 
 # Get the diff between the two
-diff /tmp/with_exclusions.txt /tmp/without_exclusions.txt > /tmp/exclusion_diff.txt
+diff /tmp/with_exclusions.txt /tmp/without_exclusions.txt > /tmp/exclusion_diff.txt || true
 
 # Assert that the diff matches the two excluded artifacts
 diff /tmp/exclusion_diff.txt $SCRIPT_DIR/artifact_exclusions.golden

@@ -5,6 +5,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Begin test dependencies
 
 load("//:defs.bzl", "maven_install")
+load("//:specs.bzl", "maven")
 
 maven_install(
     artifacts = [
@@ -42,6 +43,25 @@ maven_install(
     ],
 )
 
+maven_install(
+    name = "other_maven_with_exclusions",
+    artifacts = [
+        maven.artifact(
+            group = "com.google.guava",
+            artifact = "guava",
+            version = "27.0-jre",
+            exclusions = [
+                maven.exclusion(group = "org.codehaus.mojo", artifact = "animal-sniffer-annotations"),
+                "com.google.j2objc:j2objc-annotations",
+            ]
+        ),
+    ],
+    fetch_sources = True,
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
+
 android_sdk_repository(name = "androidsdk")
 
 BAZEL_SKYLIB_TAG = "0.6.0"
@@ -51,8 +71,5 @@ http_archive(
     strip_prefix = "bazel-skylib-%s" % BAZEL_SKYLIB_TAG,
     url = "https://github.com/bazelbuild/bazel-skylib/archive/%s.tar.gz" % BAZEL_SKYLIB_TAG,
 )
-
-# load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
-# bazel_skylib_workspace()
 
 # End test dependencies

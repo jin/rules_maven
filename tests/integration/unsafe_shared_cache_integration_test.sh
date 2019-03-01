@@ -11,10 +11,10 @@ $SCRIPT_DIR/../../third_party/coursier/coursier
 # tests for use_unsafe_shared_cache = True
 bazel fetch @unsafe_shared_cache//:all
 
-file $(bazel info output_base)/external/unsafe_shared_cache/https/repo1.maven.org/maven2/com/google/guava/guava/27.0-jre/guava-27.0-jre.jar | grep "symbolic link to" \
+file $(bazel info output_base)/external/unsafe_shared_cache/v1/https/repo1.maven.org/maven2/com/google/guava/guava/27.0-jre/guava-27.0-jre.jar | grep "symbolic link to" \
   || echo "Unsafe cache test failed for use_unsafe_shared_cache = True: guava-27.0-jre.jar is not a symbolic link"
 
-file $(bazel info output_base)/external/unsafe_shared_cache/https/repo1.maven.org/maven2/com/google/guava/guava/27.0-jre/guava-27.0-jre-sources.jar | grep "symbolic link to" \
+file $(bazel info output_base)/external/unsafe_shared_cache/v1/https/repo1.maven.org/maven2/com/google/guava/guava/27.0-jre/guava-27.0-jre-sources.jar | grep "symbolic link to" \
   || echo "Unsafe cache test failed for use_unsafe_shared_cache = True: guava-27.0-jre-sources.jar is not a symbolic link"
 
 # tests for use_unsafe_shared_cache = False

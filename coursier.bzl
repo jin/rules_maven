@@ -56,7 +56,7 @@ def _relativize_and_symlink_file(repository_ctx, absolute_path):
     else:
         # Make a symlink from the absolute path of the artifact to the relative
         # path within the output_base/external.
-        artifact_relative_path = absolute_path_parts[1]
+        artifact_relative_path = "v1/" + absolute_path_parts[1]
         repository_ctx.symlink(absolute_path, repository_ctx.path(artifact_relative_path))
     return artifact_relative_path
 

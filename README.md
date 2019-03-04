@@ -77,6 +77,35 @@ android_library(
 )
 ```
 
+The `artifact` macro translates the artifact's `group-id:artifact:id` to the
+label of the versionless target. This target is an
+[alias](https://docs.bazel.build/versions/master/be/general.html#alias) that
+points to the `java_import`/`aar_import` target in the `@maven` repository,
+which itself is wired up to dependencies specified in the artifact's POM file.
+
+For the `junit:junit` example, the following targets will be generated:
+
+```python
+alias(
+  name = "junit_junit",
+  actual = "@maven//:junit_junit_4_12",
+)
+
+java_import(
+  name = "junit_junit_4_12",
+  jars = ["@maven//:https/repo1.maven.org/maven2/junit/junit/4.12/junit-4.12.jar"],
+  srcjar = "@maven//:https/repo1.maven.org/maven2/junit/junit/4.12/junit-4.12-sources.jar",
+  deps = ["@maven//:org_hamcrest_hamcrest_core_1_3"],
+)
+
+java_import(
+  name = "org_hamcrest_hamcrest_core_1_3",
+  jars = ["@maven//:https/repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"],
+  srcjar = "@maven//:https/repo1.maven.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar",
+  deps = [],
+)
+```
+
 ## Advanced usage
 
 ### Using a persistent artifact cache
@@ -259,15 +288,6 @@ The repository rule then..
    transitive library targets for each transitive artifact (including the top level 
    ones), and their respective deps matching the `<dependencies>` element in the 
    artifact's POM file.
-
-The `artifact` macro used in the BUILD file translates the artifact fully
-qualified name to the label of the top level `java_import`/`aar_import` target
-in the `@maven` repository. This macro will depend directly on the referenced jar, and
-nothing else. 
-
-The `library` macro accepts the same arguments, but references the `java_library` target
-for the arguments. The library target will contain the referenced jar *and* all of its
-transitive dependencies. 
 
 For example, the generated BUILD file for `com.google.inject:guice:4.0` looks like this:
 

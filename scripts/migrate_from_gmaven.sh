@@ -15,7 +15,7 @@ find ./ -type f -name BUILD* -exec sed -i 's/gmaven_artifact(/maven_artifact(/g'
 find ./ -type f -name BUILD* -exec sed -i '/maven_artifact(/s/:aar//g; /maven_artifact(/s/:jar//g;' {} \;
 
 echo ""
-echo "Paste this into your WORKSPACE:"
+echo "Paste this into your WORKSPACE file:"
 echo "-------------------------"
 echo ""
 

@@ -81,7 +81,8 @@ The `artifact` macro translates the artifact's `group-id:artifact:id` to the
 label of the versionless target. This target is an
 [alias](https://docs.bazel.build/versions/master/be/general.html#alias) that
 points to the `java_import`/`aar_import` target in the `@maven` repository,
-which itself is wired up to dependencies specified in the artifact's POM file.
+which includes the transitive dependencies specified in the top level artifact's
+POM file.
 
 For the `junit:junit` example, the following targets will be generated:
 

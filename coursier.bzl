@@ -220,12 +220,6 @@ def _deduplicate_list(items):
             unique_items.append(item)
     return unique_items
 
-def _find_dependency_by_coord(coursier_report, dep_coord):
-    for artifact in coursier_report["dependencies"]:
-        if artifact["coord"] == dep_coord:
-            return artifact
-    return None
-
 # Generate the base `coursier` command depending on the OS, JAVA_HOME or the
 # location of `java`.
 def _generate_coursier_command(repository_ctx):

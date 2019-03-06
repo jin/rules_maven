@@ -14,15 +14,16 @@ bazel query @other_maven//:com_google_guava_guava_27_0_jre --output=xml \
   | cut -d"\"" -f2 \
   | cut -d":" -f2 > /tmp/without_exclusions.txt
 
+# Check that the artifacts are not excluded.
+grep "com_google_j2objc_j2objc_annotations_1_1" /tmp/without_exclusions.txt
+grep "org_codehaus_mojo_animal_sniffer_annotations_1_17" /tmp/without_exclusions.txt
+
 # Get list of inputs to the artifact library with excluded artifacts
 bazel query @other_maven_with_exclusions//:com_google_guava_guava_27_0_jre --output=xml \
   | grep "rule-input" \
   | cut -d"\"" -f2 \
   | cut -d":" -f2 > /tmp/with_exclusions.txt
 
-# Get the diff between the two
-diff /tmp/with_exclusions.txt /tmp/without_exclusions.txt > /tmp/exclusion_diff.txt || true
-
-# Assert that the diff matches the two excluded artifacts
-grep "com_google_j2objc_j2objc_annotations_1_1" /tmp/exclusion_diff.txt
-grep "org_codehaus_mojo_animal_sniffer_annotations_1_17" /tmp/exclusion_diff.txt
+# Check that the artifacts are excluded.
+grep -v "com_google_j2objc_j2objc_annotations_1_1" /tmp/with_exclusions.txt
+grep -v "org_codehaus_mojo_animal_sniffer_annotations_1_17" /tmp/with_exclusions.txt
